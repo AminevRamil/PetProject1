@@ -5,7 +5,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: "jdbc:postgresql://localhost:5432/petproject?currentSchema=public"
     username: postgres
-    password: 1379
+    password: password
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: classpath:db.changelog-master.yaml
 
