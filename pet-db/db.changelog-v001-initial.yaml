@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: Initial commit #текстовый идентификатор (Обязателен)
+      author: Aminev Ramil # автор (Обязателен)
+      changes:
+        - createTable: # создаем новую таблицу
+            tableName: TELEGRAM_USERS
+            columns:
+              - column:
+                  name: ID
+                  type: bigint
+                  autoIncrement: true
+                  remarks: Идентификатор
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: TG_ID
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+                  remarks: Идентификатор пользователя в Телеграме
