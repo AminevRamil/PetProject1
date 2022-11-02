@@ -14,11 +14,15 @@ public class TelegramUserService {
   private final TelegramUsersRepository repository;
 
   private final TelegramUserMapper mapper;
+
+  /**
+   * Сохранение информации о новом пользователе
+   */
   public TelegramUser registerUser(User user) {
     if (!repository.existsTelegramUsersByTgId(user.getId())) {
       return repository.findFirstByTgId(user.getId());
     }
     TelegramUser telegramUser = mapper.mapToNewTelegramUser(user);
-    return null;
+    return repository.save(telegramUser);
   }
 }
