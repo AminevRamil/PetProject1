@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: Modification of Telegram User Entity
+      author: Aminev Ramil
+      changes:
+        - modifyDataType:
+            tableName: telegram_users
+            columnName: "tg_id"
+            newDataType: bigint
+        - addColumn: # создаем новую таблицу
+            tableName: telegram_users
+            columns:
+              - column:
+                  name: first_name
+                  type: varchar(64)
+                  remarks: Имя пользователя
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(64)
+                  remarks: Фамилия пользователя
+                  constraints:
+                    nullable: true
+              - column:
+                  name: username
+                  type: varchar(32)
+                  remarks: Тэг пользователя
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_actual
+                  type: boolean
+                  remarks: Актуальность данных
+                  constraints:
+                    nullable: false

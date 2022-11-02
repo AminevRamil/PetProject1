@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include: # список активных миграций
       file: db.changelog-v001-initial.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-v002-tgUserEntities.yaml
+      relativeToChangelogFile: true
