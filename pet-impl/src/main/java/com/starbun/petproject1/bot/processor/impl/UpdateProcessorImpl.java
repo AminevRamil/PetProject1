@@ -4,15 +4,15 @@ import com.starbun.petproject1.bot.model.UpdateExtended;
 import com.starbun.petproject1.bot.processor.MessageProcessor;
 import com.starbun.petproject1.bot.processor.UpdateProcessor;
 import com.starbun.petproject1.exception.NoImplementationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
+@RequiredArgsConstructor
 public class UpdateProcessorImpl implements UpdateProcessor {
 
-  @Autowired
-  private MessageProcessor messageProcessor;
+  private final MessageProcessor messageProcessor;
 
   @Override
   public void process(Update update) {

@@ -2,13 +2,14 @@ package com.starbun.petproject1.bot;
 
 import com.starbun.petproject1.bot.processor.UpdateProcessor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
+@RequiredArgsConstructor
 public class StarBunBot extends TelegramLongPollingBot {
 
   @Getter
@@ -19,8 +20,7 @@ public class StarBunBot extends TelegramLongPollingBot {
   @Value("${telegram.bot.name}")
   private String botUsername;
 
-  @Autowired
-  private UpdateProcessor updateProcessor;
+  private final UpdateProcessor updateProcessor;
 
   @Override
   public void onUpdateReceived(Update update) {
