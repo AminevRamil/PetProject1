@@ -11,6 +11,7 @@ public interface TelegramUserMapper {
 
   @Mapping(target = "tgId", source = "id")
   @Mapping(target = "id", ignore = true)
-  @Mapping(target = "isActual", ignore = true)
+  @Mapping(target = "username", source = "userName")
+  @Mapping(target = "isActual", expression = "java(true)")
   public abstract TelegramUser mapToNewTelegramUser(User user);
 }
