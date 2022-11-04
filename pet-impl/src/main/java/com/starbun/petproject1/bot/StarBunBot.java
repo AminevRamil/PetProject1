@@ -1,5 +1,6 @@
 package com.starbun.petproject1.bot;
 
+import com.starbun.petproject1.bot.command.BasicCommand;
 import com.starbun.petproject1.bot.processor.UpdateProcessor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingC
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Component("StarBunBot")
 @RequiredArgsConstructor
@@ -22,11 +24,13 @@ public class StarBunBot extends TelegramLongPollingCommandBot {
   @Value("${telegram.bot.name}")
   private String botUsername;
 
+  private final List<BasicCommand> commandList;
+
   private final UpdateProcessor updateProcessor;
 
   @PostConstruct
   public void init() {
-
+    commandList.forEach(this::register);
   }
 
   @Override
