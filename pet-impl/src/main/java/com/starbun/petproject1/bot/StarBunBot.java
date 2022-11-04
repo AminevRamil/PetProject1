@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-@Component
+import javax.annotation.PostConstruct;
+
+@Component("StarBunBot")
 @RequiredArgsConstructor
-public class StarBunBot extends TelegramLongPollingBot {
+public class StarBunBot extends TelegramLongPollingCommandBot {
 
   @Getter
   @Value("${telegram.bot.token}")
@@ -22,8 +24,13 @@ public class StarBunBot extends TelegramLongPollingBot {
 
   private final UpdateProcessor updateProcessor;
 
+  @PostConstruct
+  public void init() {
+
+  }
+
   @Override
-  public void onUpdateReceived(Update update) {
+  public void processNonCommandUpdate(Update update) {
     updateProcessor.process(update);
   }
 }
