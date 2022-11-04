@@ -57,6 +57,22 @@ public class UpdateExtended extends Update {
       updateType = UpdateType.POLL;
       safeCounter++;
     }
+    if (update.hasMyChatMember()) {
+      updateType = UpdateType.POLL_ANSWER;
+      safeCounter++;
+    }
+    if (update.hasMyChatMember()) {
+      updateType = UpdateType.PRIVATE_CHAT_MEMBER;
+      safeCounter++;
+    }
+    if (update.hasMyChatMember()) {
+      updateType = UpdateType.CHAT_MEMBER;
+      safeCounter++;
+    }
+    if (update.hasMyChatMember()) {
+      updateType = UpdateType.CHAT_JOIN_REQUEST;
+      safeCounter++;
+    }
     if (safeCounter != 1) {
       throw new IllegalArgumentException("Пришло несколько типов сообщений в одном обновлении. Согласно документации, такого быть не должно");
     }
