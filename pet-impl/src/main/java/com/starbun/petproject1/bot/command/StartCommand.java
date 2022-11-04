@@ -23,7 +23,7 @@ public class StartCommand extends BasicCommand {
 
   @Override
   public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
-    switch (chat.getType()){
+    switch (chat.getType()) {
       case "private" -> {
         TelegramUserDto telegramUser = telegramUserService.registerUser(user);
         SendMessage message = new SendMessage();

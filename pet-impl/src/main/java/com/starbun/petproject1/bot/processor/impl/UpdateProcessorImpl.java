@@ -18,13 +18,12 @@ public class UpdateProcessorImpl implements UpdateProcessor {
   public void process(Update update) {
     UpdateExtended updateExt = new UpdateExtended(update);
     switch (updateExt.getUpdateType()) {
-
       case MESSAGE -> messageProcessor.processMessage(update.getMessage());
       case INLINE_QUERY, CHOSEN_INLINE_QUERY, CALLBACK_QUERY, EDITED_MESSAGE, CHANNEL_POST,
-        EDITED_CHANNEL_POST, SHIPPING_QUERY, PRE_CHECKOUT_QUERY, POLL -> {
+        EDITED_CHANNEL_POST, SHIPPING_QUERY, PRE_CHECKOUT_QUERY, POLL, POLL_ANSWER,
+        PRIVATE_CHAT_MEMBER, CHAT_MEMBER, CHAT_JOIN_REQUEST -> {
         throw new NoImplementationException("Нет реализации процессора сообщений типа " + updateExt.getUpdateType());
       }
-
       default -> throw new IllegalArgumentException("Пришёл неизвестный тип сообщения от телеги. Пора обновлять апи");
     }
   }

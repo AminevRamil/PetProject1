@@ -36,6 +36,11 @@ public class TelegramUserService {
     return mapper.mapToTelegramUserDto(repository.save(telegramUser));
   }
 
+  /**
+   * Обновление информации о пользователе, в случае если он поменял свои данные между отдельными обращениями к боту
+   * @param user данные о пользователе, пришедшие из телеграм
+   * @param existingUser данные о пользователе хранящиеся у бота
+   */
   private void updateInfoAboutUser(User user, TelegramUser existingUser) {
     if (!StringUtils.equals(existingUser.getUsername(), user.getUserName())) {
       existingUser.setUsername(user.getUserName());
