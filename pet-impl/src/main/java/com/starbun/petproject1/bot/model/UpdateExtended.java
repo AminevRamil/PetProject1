@@ -1,5 +1,6 @@
 package com.starbun.petproject1.bot.model;
 
+import com.starbun.petproject1.exception.TelegramApiMismatchException;
 import lombok.Getter;
 import lombok.ToString;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -74,7 +75,7 @@ public class UpdateExtended extends Update {
       safeCounter++;
     }
     if (safeCounter != 1) {
-      throw new IllegalArgumentException("Пришло несколько типов сообщений в одном обновлении. Согласно документации, такого быть не должно");
+      throw new TelegramApiMismatchException("Пришло несколько типов сообщений в одном обновлении. Согласно документации, такого быть не должно");
     }
   }
 }
