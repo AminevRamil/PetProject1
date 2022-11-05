@@ -35,6 +35,6 @@ public class StarBunBot extends TelegramLongPollingCommandBot {
 
   @Override
   public void processNonCommandUpdate(Update update) {
-    updateProcessor.process(update);
+    updateProcessor.process(this, update);
   }
 }
