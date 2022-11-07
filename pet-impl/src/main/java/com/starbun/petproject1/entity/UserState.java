@@ -16,6 +16,7 @@ public class UserState {
   private Long tgId;
 
   @Column
+  @Enumerated(EnumType.STRING)
   private State currentState;
 
   @Column
