@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add Unique Key for USER_STATE
+      author: Aminev Ramil
+      changes:
+        - addUniqueConstraint:
+            columnNames: TG_ID
+            constraintName: USER_STATE_UN
+            deferrable: false
+            disabled: false
+            initiallyDeferred: false
+            schemaName: public
+            tableName: USER_STATE
+            validate: true

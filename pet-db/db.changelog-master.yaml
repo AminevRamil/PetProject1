@@ -11,3 +11,6 @@ databaseChangeLog:
   - include:
       file: db.changelog-v004-debtTable.yaml
       relativeToChangelogFile: true
+  - include:
+      file: db.changelog-v005-addUniqueKeyForUserStateTable.yaml
+      relativeToChangelogFile: true

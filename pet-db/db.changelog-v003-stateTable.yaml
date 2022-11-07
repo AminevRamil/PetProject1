@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: Add Users' State Table
+      id: Add USERS Table
       author: Aminev Ramil
       changes:
         - createTable:

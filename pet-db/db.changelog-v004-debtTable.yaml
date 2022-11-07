@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: Add Users' State Table
+      id: Add DEBTS Table and Unique Key for TELEGRAM_USERS
       author: Aminev Ramil
       changes:
         - addUniqueConstraint:
