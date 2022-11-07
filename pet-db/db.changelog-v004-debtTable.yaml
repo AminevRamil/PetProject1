@@ -33,14 +33,19 @@ databaseChangeLog:
                     foreignKey: FK_USER_DEBT
                     reference: USERS(TG_ID)
               - column:
-                  name: CURRENT_STATE
+                  name: DEPTOR
                   type: varchar(64)
-                  remarks: Название текущего состояния работы с ботом
+                  remarks: Имя должника
                   constraints:
                     nullable: false
               - column:
-                  name: STATE_MEMO
-                  type: jsonb
+                  name: DEPT_SUBJECT
+                  type: varchar(200)
                   remarks: Информация о текущем состоянии пользователя
                   constraints:
-                    nullable: true
+                    nullable: false
+              - column:
+                  name: REDEMPTION_STATUS
+                  type: boolean
+                  remarks: Статус исполнения долга
+                  defaultValue: false
