@@ -5,3 +5,9 @@ databaseChangeLog:
   - include:
       file: db.changelog-v002-tgUserEntities.yaml
       relativeToChangelogFile: true
+  - include:
+      file: db.changelog-v003-stateTable.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-v004-debtTable.yaml
+      relativeToChangelogFile: true

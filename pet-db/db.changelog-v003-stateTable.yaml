@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add Users' State Table
+      author: Aminev Ramil
+      changes:
+        - createTable:
+            tableName: USER_STATE
+            columns:
+              - column:
+                  name: TG_ID
+                  type: bigint
+                  autoIncrement: true
+                  remarks: Идентификатор пользователя в Телеграм
+                  constraints:
+                    nullable: false
+                    foreignKey: FK_USER_STATE
+                    reference: USERS(TG_ID)
+              - column:
+                  name: CURRENT_STATE
+                  type: varchar(64)
+                  remarks: Название текущего состояния работы с ботом
+                  constraints:
+                    nullable: false
+              - column:
+                  name: STATE_MEMO
+                  type: jsonb
+                  remarks: Информация о текущем состоянии пользователя
+                  constraints:
+                    nullable: true
