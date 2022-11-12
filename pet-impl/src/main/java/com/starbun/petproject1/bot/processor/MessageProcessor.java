@@ -8,5 +8,5 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
  */
 public interface MessageProcessor extends BasicProcessor<Message> {
 
-  void processMessage(AbsSender absSender, Message message);
+  void process(AbsSender absSender, Message message);
 }

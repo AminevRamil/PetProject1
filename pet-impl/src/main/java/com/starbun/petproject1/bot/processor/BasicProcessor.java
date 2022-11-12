@@ -1,6 +1,5 @@
 package com.starbun.petproject1.bot.processor;
 
-import com.starbun.petproject1.exception.NoImplementationException;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.bots.AbsSender;
@@ -9,9 +8,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.Serializable;
 
 public interface BasicProcessor<T extends BotApiObject> {
-  default void process(T t) {
-    throw new NoImplementationException("Обработчик данного обновления не реализован");
-  }
+  /**
+   * Обработка объекта, соответствующего обработчику
+   * @implNote Проверяется наличие обработчика на этапе компиляции
+   */
+  void process(AbsSender absSender, T t);
 
   /**
    * Простая обёртка над процессом выполнения отправки ответов телеграм-ботом, чтобы
