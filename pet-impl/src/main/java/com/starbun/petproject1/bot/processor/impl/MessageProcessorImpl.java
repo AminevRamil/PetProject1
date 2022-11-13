@@ -21,7 +21,7 @@ public class MessageProcessorImpl implements MessageProcessor {
   private final TelegramUserService telegramUserService;
 
   @Override
-  public void processMessage(AbsSender absSender, Message message) {
+  public void process(AbsSender absSender, Message message) {
     log.info("Пришло сообщение от пользователя {}", message.getFrom().getId());
     telegramUserService.registerUser(message.getFrom());
     SendMessage sendMessage = new SendMessage();
