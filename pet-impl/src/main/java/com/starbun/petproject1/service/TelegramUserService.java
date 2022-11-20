@@ -77,6 +77,20 @@ public class TelegramUserService {
   }
 
   /**
+   * Смена статуса работы с ботом для указанного пользователя
+   * @param tgId идентификатор пользователя в телеграм
+   * @param newStatus новый статус работы с ботом
+   * @return объект хранящий информацию о текущем состоянии работы с ботом
+   */
+  @Transactional
+  public UserStateDto getCurrentStatusAndMakeTransition(Long tgId, State newStatus) {
+    Optional<UserState> userStateOpt = userStateRepository.findById(tgId);
+    UserState userState = userStateOpt.orElse(createBeginState(tgId));
+    userState.setCurrentState(newStatus);
+    return userStateMapper.toDto(userState);
+  }
+
+  /**
    * Создание новой записи о состоянии бота для конкретного пользователя
    * @param tgId идентификатор пользователя
    * @return состояние пользователя
