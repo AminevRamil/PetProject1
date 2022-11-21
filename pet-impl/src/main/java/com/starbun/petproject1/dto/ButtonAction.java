@@ -4,5 +4,6 @@ public enum ButtonAction {
   CREATE_DEBT,
   CHANGE_DEBTOR,
   CHANGE_DEBT_SUBJECT,
-  CHANGE_DATE
+  CHANGE_DATE,
+  SAVE_DEBT
 }
