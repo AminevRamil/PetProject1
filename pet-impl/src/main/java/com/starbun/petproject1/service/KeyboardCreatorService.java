@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -27,7 +28,7 @@ public class KeyboardCreatorService {
       case DEBT_CREATE -> {
         return debtCreateKeyboard(userId);
       }
-      case DEPT_DRAFT -> {
+      case DEBT_DRAFT -> {
         return debtDraftKeyboard(userId);
       }
       default -> throw new NoImplementationException("Для данного состояния не существует инлайн клавиатуры: " + state);
@@ -42,12 +43,14 @@ public class KeyboardCreatorService {
    */
   private InlineKeyboardMarkup debtDraftKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
-        .keyboardRow(Collections.singletonList(
-            createButton(ButtonAction.CHANGE_DEBTOR, userId, "Указать должника")))
-        .keyboardRow(Collections.singletonList(
+        .keyboardRow(Arrays.asList(
+            createButton(ButtonAction.CHANGE_DEBTOR, userId, "Указать должника"),
             createButton(ButtonAction.CHANGE_DEBT_SUBJECT, userId, "Указать предмет долга")))
-        .keyboardRow(Collections.singletonList(
+        .keyboardRow(Arrays.asList(
+            createButton(ButtonAction.CHANGE_DEBT_STATUS, userId, "Указать статус погашения"),
             createButton(ButtonAction.CHANGE_DATE, userId, "Указать дату возврата (опц.)")))
+        .keyboardRow(Collections.singletonList(
+            createButton(ButtonAction.SAVE_DEBT, userId, "Сохранить")))
         .build();
   }
 
@@ -73,7 +76,7 @@ public class KeyboardCreatorService {
    * @param buttonAction действие, которое будет выполнять кнопка
    * @param userId идентификатор пользователя телеграм, с которым будет связана кнопка
    * @param text текст кнопки, видимый пользователем
-   * @return кнопку, готовую для вставки в ReplyMarkup
+   * @return кнопку, готовую для вставки в InlineKeyboardMarkup
    */
   @SneakyThrows
   private InlineKeyboardButton createButton(ButtonAction buttonAction, Long userId, String text) {

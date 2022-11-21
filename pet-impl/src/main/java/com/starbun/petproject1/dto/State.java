@@ -4,5 +4,6 @@ package com.starbun.petproject1.dto;
 public enum State {
   BEGIN,
   DEBT_CREATE,
-  DEPT_DRAFT
+  DEBT_DRAFT,
+  AWAIT_INPUT
 }

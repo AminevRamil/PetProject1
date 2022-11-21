@@ -50,7 +50,7 @@ public class DebtCommand extends BasicCommand {
 
     switch (buttonData.getBAction()) {
       case CREATE_DEBT -> {
-        UserStateDto currentStatus = telegramUserService.getCurrentStatusAndMakeTransition(buttonData.getUId(), State.DEPT_DRAFT);
+        UserStateDto currentStatus = telegramUserService.getCurrentStatusAndMakeTransition(buttonData.getUId(), State.DEBT_DRAFT);
         if (currentStatus.getStateMemo() == null || !(currentStatus.getStateMemo() instanceof DebtDraft)) {
           currentStatus.setStateMemo(new DebtDraft());
         }
@@ -80,7 +80,7 @@ public class DebtCommand extends BasicCommand {
         .chatId(originalMessage.getChatId())
         .parseMode(MARKDOWN)
         .text(renderDraftInMessage(draft))
-        .replyMarkup(keyboardCreatorService.createInlineKeyboardForState(State.DEPT_DRAFT, userId))
+        .replyMarkup(keyboardCreatorService.createInlineKeyboardForState(State.DEBT_DRAFT, userId))
         .build();
   }
 
