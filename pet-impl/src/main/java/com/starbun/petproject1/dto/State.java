@@ -1,9 +1,10 @@
 package com.starbun.petproject1.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-public enum State {
-  BEGIN,
-  DEBT_CREATE,
-  DEBT_DRAFT,
-  AWAIT_INPUT
+@Data
+@AllArgsConstructor
+public class State {
+  private String name;
 }
