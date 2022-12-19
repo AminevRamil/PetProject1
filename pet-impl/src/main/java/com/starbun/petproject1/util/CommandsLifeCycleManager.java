@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class CommandsLifeCycleController {
+public class CommandsLifeCycleManager {
 
   private final Map<Long, BasicCommand> userToCommandMap = new HashMap<>();
 
