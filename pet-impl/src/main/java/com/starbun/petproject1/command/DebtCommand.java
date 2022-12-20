@@ -6,6 +6,8 @@ import com.starbun.petproject1.service.DebtKeyboardService;
 import com.starbun.petproject1.service.TelegramUserService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,6 +22,7 @@ import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT
 import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT_OPTIONS;
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
+@Slf4j
 @Component
 @Scope("prototype")
 public class DebtCommand extends BasicCommand {
@@ -34,7 +37,7 @@ public class DebtCommand extends BasicCommand {
     DEBT_CREATE(1, "DEBT_CREATE"),
     DEBT_DRAFT(2, "DEBT_CREATE"),
     DEBT_INPUT(3, "DEBT_INPUT"),
-    DEBT_END(3, "DEBT_END");
+    DEBT_END(Integer.MAX_VALUE, "DEBT_END");
     private final Integer id;
     private final String name;
   }
@@ -43,6 +46,8 @@ public class DebtCommand extends BasicCommand {
   @Getter
   private DebtCommandStates currentState = DEBT_OPTIONS;
   private DebtDraft currentEditingDebt;
+  @Setter
+  @Getter
   private Long userOwnerId;
 
   // Бины/сервисы
