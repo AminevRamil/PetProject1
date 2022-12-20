@@ -1,7 +1,6 @@
-package com.starbun.petproject1.bot.processor;
+package com.starbun.petproject1.processor;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 /**

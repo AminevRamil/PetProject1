@@ -1,11 +1,12 @@
-package com.starbun.petproject1.bot.command;
+package com.starbun.petproject1.command;
 
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
-import com.starbun.petproject1.dto.State;
-import com.starbun.petproject1.dto.UserStateDto;
-import com.starbun.petproject1.service.KeyboardCreatorService;
+import com.starbun.petproject1.service.DebtKeyboardService;
 import com.starbun.petproject1.service.TelegramUserService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -15,29 +16,57 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT_DRAFT;
+import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT_OPTIONS;
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Component
+@Scope("prototype")
 public class DebtCommand extends BasicCommand {
 
-  private final TelegramUserService telegramUserService;
-
-  private final KeyboardCreatorService keyboardCreatorService;
-
-  public DebtCommand(TelegramUserService telegramUserService, KeyboardCreatorService keyboardCreatorService) {
-    super("debt", "Учёт долгов");
-    this.telegramUserService = telegramUserService;
-    this.keyboardCreatorService = keyboardCreatorService;
+  /**
+   * Все состояния работы с пользователем, в которых может пребывать данная команда
+   */
+  @Getter
+  @AllArgsConstructor
+  public enum DebtCommandStates implements CommandStates {
+    DEBT_OPTIONS(0, "DEBT_OPTIONS"),
+    DEBT_CREATE(1, "DEBT_CREATE"),
+    DEBT_DRAFT(2, "DEBT_CREATE"),
+    DEBT_INPUT(3, "DEBT_INPUT"),
+    DEBT_END(3, "DEBT_END");
+    private final Integer id;
+    private final String name;
   }
 
+  // Операционные данные (состояние команды)
+  @Getter
+  private DebtCommandStates currentState = DEBT_OPTIONS;
+  private DebtDraft currentEditingDebt;
+  private Long userOwnerId;
+
+  // Бины/сервисы
+  private final TelegramUserService telegramUserService;
+  private final DebtKeyboardService debtKeyboardService;
+
+
+  public DebtCommand(TelegramUserService telegramUserService, DebtKeyboardService debtKeyboardService) {
+    super("debt", "Учёт долгов");
+    this.telegramUserService = telegramUserService;
+    this.debtKeyboardService = debtKeyboardService;
+  }
+
+  /**
+   * Метод срабатывает только при наличии "/debt" в начале текстового сообщения
+   */
   @Override
   public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
-    UserStateDto currentStatus = telegramUserService.getCurrentStatusAndMakeTransition(user.getId(), State.DEBT_CREATE);
+    currentState = DEBT_OPTIONS; //TODO Скорее всего стоит сделать свитч или какой-то механизм принятия решений
 
     SendMessage message = SendMessage.builder()
         .chatId(chat.getId())
         .text("Создать новый долг?")
-        .replyMarkup(keyboardCreatorService.createInlineKeyboardForState(currentStatus.getCurrentState(), user.getId()))
+        .replyMarkup(debtKeyboardService.createForState(currentState, userOwnerId))
         .build();
     send(absSender, message);
   }
@@ -46,31 +75,19 @@ public class DebtCommand extends BasicCommand {
    * Метод обработки инлайн-кнопки
    * @implNote Переделать без свитчей. Хендлеры?
    */
+  @Override
   public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData) {
 
-    switch (buttonData.getBAction()) {
-      case CREATE_DEBT -> {
-        UserStateDto currentStatus = telegramUserService.getCurrentStatusAndMakeTransition(buttonData.getUId(), State.DEBT_DRAFT);
-        if (currentStatus.getStateMemo() == null || !(currentStatus.getStateMemo() instanceof DebtDraft)) {
-          currentStatus.setStateMemo(new DebtDraft());
+    switch (currentState) {
+      case DEBT_CREATE -> {
+        currentState = DEBT_DRAFT;
+        if (currentEditingDebt == null) {
+          currentEditingDebt = new DebtDraft();
         }
-        DebtDraft draft = (DebtDraft) currentStatus.getStateMemo();
-        EditMessageText editMessage = changeMessageWithDraftInfo(message.getMessage(), draft, buttonData.getUId());
+        EditMessageText editMessage = changeMessageWithDraftInfo(message.getMessage(), currentEditingDebt, buttonData.getUId());
         send(absSender, editMessage);
       }
-      case CHECK_DEBTS -> {
-      }
-      case SELECT_DEBT -> {
-      }
-      case CHANGE_DEBTOR -> {
-      }
-      case CHANGE_DEBT_SUBJECT -> {
-      }
-      case CHANGE_DATE -> {
-      }
-      case SAVE_DEBT -> {
-      }
-      default -> throw new IllegalArgumentException("Обработчик не умеет обрабатывать кнопки с действием " + buttonData.getBAction());
+      default -> throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
     }
   }
 
@@ -80,7 +97,7 @@ public class DebtCommand extends BasicCommand {
         .chatId(originalMessage.getChatId())
         .parseMode(MARKDOWN)
         .text(renderDraftInMessage(draft))
-        .replyMarkup(keyboardCreatorService.createInlineKeyboardForState(State.DEBT_DRAFT, userId))
+        .replyMarkup(debtKeyboardService.createForState(DEBT_DRAFT, userId))
         .build();
   }
 

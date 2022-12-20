@@ -1,9 +1,9 @@
-package com.starbun.petproject1.bot.processor.impl;
+package com.starbun.petproject1.processor.impl;
 
-import com.starbun.petproject1.bot.model.UpdateExtended;
-import com.starbun.petproject1.bot.processor.CallbackQueryProcessor;
-import com.starbun.petproject1.bot.processor.MessageProcessor;
-import com.starbun.petproject1.bot.processor.UpdateProcessor;
+import com.starbun.petproject1.model.UpdateExtended;
+import com.starbun.petproject1.processor.CallbackQueryProcessor;
+import com.starbun.petproject1.processor.MessageProcessor;
+import com.starbun.petproject1.processor.UpdateProcessor;
 import com.starbun.petproject1.exception.NoImplementationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

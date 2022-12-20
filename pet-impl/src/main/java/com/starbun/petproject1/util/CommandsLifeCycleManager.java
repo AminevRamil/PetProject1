@@ -1,6 +1,6 @@
 package com.starbun.petproject1.util;
 
-import com.starbun.petproject1.bot.command.BasicCommand;
+import com.starbun.petproject1.command.BasicCommand;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

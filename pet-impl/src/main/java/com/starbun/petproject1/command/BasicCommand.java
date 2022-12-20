@@ -1,8 +1,10 @@
-package com.starbun.petproject1.bot.command;
+package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.InlineButtonInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -16,6 +18,10 @@ import java.io.Serializable;
  */
 @Slf4j
 public abstract class BasicCommand extends DefaultBotCommand {
+
+  protected abstract CommandStates getCurrentState();
+
+  abstract public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData);
 
   /**
    * Необходимость заполнить эти два поля, делает невозможным создания простого конструктора

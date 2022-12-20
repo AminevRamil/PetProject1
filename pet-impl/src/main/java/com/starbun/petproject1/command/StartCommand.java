@@ -1,20 +1,29 @@
-package com.starbun.petproject1.bot.command;
+package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.InlineButtonInfo;
+import com.starbun.petproject1.dto.State;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.dto.UserStateDto;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
 import com.starbun.petproject1.service.TelegramUserService;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+import java.util.List;
+
 @Slf4j
 @Component
 public class StartCommand extends BasicCommand {
+
+  @Getter
+  private List<State> states;
 
   private final TelegramUserService telegramUserService;
 
@@ -28,7 +37,6 @@ public class StartCommand extends BasicCommand {
     switch (chat.getType()) {
       case "private" -> {
         TelegramUserDto telegramUser = telegramUserService.registerUser(user);
-        UserStateDto currentState = telegramUserService.getCurrentStatus(telegramUser.getTgId());
         SendMessage message = createGreetingsMessage(chat, telegramUser);
         send(absSender, message);
       }
@@ -50,5 +58,15 @@ public class StartCommand extends BasicCommand {
     message.setChatId(chat.getId().toString());
     message.setText("Стартуем, " + telegramUser.getActualUsername() + "!");
     return message;
+  }
+
+  @Override
+  protected CommandStates getCurrentState() {
+    return null;
+  }
+
+  @Override
+  public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData) {
+
   }
 }

@@ -1,7 +1,7 @@
-package com.starbun.petproject1.bot;
+package com.starbun.petproject1;
 
-import com.starbun.petproject1.bot.command.BasicCommand;
-import com.starbun.petproject1.bot.processor.UpdateProcessor;
+import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.processor.UpdateProcessor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

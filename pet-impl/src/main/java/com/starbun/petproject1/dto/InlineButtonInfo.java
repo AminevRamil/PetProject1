@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InlineButtonInfo {
   /**
-   * Идентификатор пользователя в телеграм
+   * Идентификатор пользователя в телеграм,
+   * который спровоцировал появление кнопки (владелец кнопки?)
    */
   private Long uId;
   /**
