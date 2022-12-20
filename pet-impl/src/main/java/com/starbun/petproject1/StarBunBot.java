@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component("StarBunBot")
 @RequiredArgsConstructor
-public class StarBunBot extends TelegramLongPollingCommandBot {
+public class StarBunBot extends TelegramLongPollingBot {
 
   @Getter
   @Value("${telegram.bot.token}")
@@ -34,13 +34,11 @@ public class StarBunBot extends TelegramLongPollingCommandBot {
 
   @PostConstruct
   public void init() {
-    commandList.forEach(this::register);
-
     initCommandMenu();
   }
 
   @Override
-  public void processNonCommandUpdate(Update update) {
+  public void onUpdateReceived(Update update) {
     updateProcessor.process(this, update);
   }
 
@@ -61,4 +59,10 @@ public class StarBunBot extends TelegramLongPollingCommandBot {
     }
   }
 
+
+  @Override
+  public void onRegister() {
+    super.onRegister();
+    // TODO Можно кинуть уведомление о старте бота
+  }
 }
