@@ -1,4 +1,4 @@
-package com.starbun.petproject1.bot.processor;
+package com.starbun.petproject1.processor;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;

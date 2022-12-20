@@ -1,4 +1,4 @@
-package com.starbun.petproject1.bot.model;
+package com.starbun.petproject1.model;
 
 /**
  * Перечисление возможных типов обновления получаемых от телеграм.

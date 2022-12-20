@@ -1,4 +1,4 @@
-package com.starbun.petproject1.bot.processor;
+package com.starbun.petproject1.processor;
 
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

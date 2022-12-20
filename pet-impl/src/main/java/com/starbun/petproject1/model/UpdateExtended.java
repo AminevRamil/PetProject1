@@ -1,4 +1,4 @@
-package com.starbun.petproject1.bot.model;
+package com.starbun.petproject1.model;
 
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
 import lombok.Getter;

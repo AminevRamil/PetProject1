@@ -1,9 +1,10 @@
 package com.starbun.petproject1.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.starbun.petproject1.command.CommandStates;
+import com.starbun.petproject1.command.DebtCommand.DebtCommandStates;
 import com.starbun.petproject1.dto.ButtonAction;
 import com.starbun.petproject1.dto.InlineButtonInfo;
-import com.starbun.petproject1.dto.State;
 import com.starbun.petproject1.exception.NoImplementationException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,13 +20,16 @@ import java.util.Collections;
  */
 @Component
 @AllArgsConstructor
-public class KeyboardCreatorService {
+public class DebtKeyboardService implements InlineKeyboardService {
 
   private final ObjectMapper jsonMapper;
 
-  public InlineKeyboardMarkup createInlineKeyboardForState(State state, Long userId) {
-    switch (state) {
-      case DEBT_CREATE -> {
+
+  @Override
+  public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
+    DebtCommandStates debtState = (DebtCommandStates) state;
+    switch (debtState) {
+      case DEBT_OPTIONS, DEBT_CREATE -> {
         return debtCreateKeyboard(userId);
       }
       case DEBT_DRAFT -> {
