@@ -25,7 +25,7 @@ public class TelegramUserService {
    * Сохранение информации о новом пользователе
    */
   @Transactional
-  public TelegramUserDto registerUser(User user) {
+  public TelegramUserDto registerOfFetchUser(User user) {
     if (usersRepository.existsTelegramUsersByTgId(user.getId())) {
       TelegramUser existingUser = usersRepository.findFirstByTgId(user.getId());
       updateInfoAboutUser(user, existingUser);

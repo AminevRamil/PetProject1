@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Объект с ответом команды. Ответ может иметь разные типы и хранить разную информацию.
+ * TODO Добавить один единый обработчик ответов от команд, чтоб команды не занимались рутиной Telegram API.
+ */
 @Data
 @Builder
 @AllArgsConstructor
