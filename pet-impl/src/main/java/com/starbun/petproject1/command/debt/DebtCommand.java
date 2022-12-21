@@ -1,5 +1,7 @@
 package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.service.DebtKeyboardService;
@@ -61,19 +63,16 @@ public class DebtCommand extends BasicCommand {
     this.debtKeyboardService = debtKeyboardService;
   }
 
-  /**
-   * Метод срабатывает только при наличии "/debt" в начале текстового сообщения
-   */
   @Override
-  public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
+  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
     currentState = DEBT_OPTIONS; //TODO Скорее всего стоит сделать свитч или какой-то механизм принятия решений
 
-    SendMessage message = SendMessage.builder()
-        .chatId(chat.getId())
+    SendMessage sendMessage = SendMessage.builder()
+        .chatId(message.getChatId())
         .text("Создать новый долг?")
         .replyMarkup(debtKeyboardService.createForState(currentState, userOwnerId))
         .build();
-    send(absSender, message);
+    send(absSender, sendMessage);
   }
 
   /**
