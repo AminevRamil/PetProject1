@@ -1,7 +1,7 @@
 package com.starbun.petproject1.util;
 
 import com.starbun.petproject1.command.BasicCommand;
-import com.starbun.petproject1.command.StartCommand;
+import com.starbun.petproject1.command.start.StartCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
@@ -56,6 +56,11 @@ public class CommandsLifeCycleManager {
     return userToCommandMap.containsKey(userId) ? getUserCommandAndUpdateExpiryDate(userId) : getNewStartCommand(userId);
   }
 
+  /**
+   * Достаёт команду, с которой работает пользователь и обновляет её "срок годности"
+   * @param userId внутренний идентификатор пользователя
+   * @return команду с которой работает пользователь
+   */
   private BasicCommand getUserCommandAndUpdateExpiryDate(Long userId) {
     BasicCommand basicCommand = userToCommandMap.get(userId);
     basicCommand.setExpiryDate(LocalDateTime.now().plusMinutes(TIME_TO_LIVE));
