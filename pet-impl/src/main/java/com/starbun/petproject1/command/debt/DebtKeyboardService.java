@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.command.DebtCommand.DebtCommandStates;
 import com.starbun.petproject1.dto.ButtonAction;
-import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.exception.NoImplementationException;
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
+import com.starbun.petproject1.service.InlineKeyboardService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,11 +16,7 @@ import java.util.Collections;
  * Фабрика? Абстрактная фабрика? Фабричный метод?
  */
 @Component
-@AllArgsConstructor
-public class DebtKeyboardService implements InlineKeyboardService {
-
-  private final ObjectMapper jsonMapper;
-
+public class DebtKeyboardService extends InlineKeyboardService {
 
   @Override
   public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
@@ -72,25 +65,6 @@ public class DebtKeyboardService implements InlineKeyboardService {
             createButton(ButtonAction.SELECT_DEBT, userId, "Просмотр долгов")))
         .keyboardRow(Collections.singletonList(
             createButton(ButtonAction.SELECT_DEBT, userId, "Редактировать долг")))
-        .build();
-  }
-
-  /**
-   * Метод для создания инлайн кнопки
-   * @param buttonAction действие, которое будет выполнять кнопка
-   * @param userId идентификатор пользователя телеграм, с которым будет связана кнопка
-   * @param text текст кнопки, видимый пользователем
-   * @return кнопку, готовую для вставки в InlineKeyboardMarkup
-   */
-  @SneakyThrows
-  private InlineKeyboardButton createButton(ButtonAction buttonAction, Long userId, String text) {
-    InlineButtonInfo info = InlineButtonInfo.builder()
-        .bAction(buttonAction)
-        .uId(userId)
-        .build();
-    return InlineKeyboardButton.builder()
-        .text(text)
-        .callbackData(jsonMapper.writeValueAsString(info))
         .build();
   }
 }
