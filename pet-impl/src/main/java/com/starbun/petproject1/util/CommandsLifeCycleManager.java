@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -32,15 +33,17 @@ public class CommandsLifeCycleManager {
    * Планировщик для завершения работы с командами по таймауту.
    * TODO сделать возможность задания периода очистки в yml
    */
-  @Scheduled(cron = "0 0 * * * *")
+  @Scheduled(cron = "0 * * * * *")
   public void cleanupOldCommands() {
     LocalDateTime now = LocalDateTime.now();
     List<Map.Entry<Long, BasicCommand>> commandsToDelete = userToCommandMap.entrySet().stream()
         .filter(entry -> entry.getValue().getExpiryDate().isBefore(now))
         .toList();
-    commandsToDelete.stream().map(Map.Entry::getKey).forEach(userToCommandMap::remove);
-    // TODO Проверить, что GC действительно сам уничтожит эти прототипы самостоятельно
-    log.info("Удалено команд по таймауту: {}", commandsToDelete.size());
+    if (!CollectionUtils.isEmpty(commandsToDelete)) {
+      commandsToDelete.stream().map(Map.Entry::getKey).forEach(userToCommandMap::remove);
+      // TODO Проверить, что GC действительно сам уничтожит эти прототипы самостоятельно
+      log.info("Удалено команд по таймауту: {}", commandsToDelete.size());
+    }
   }
 
   /**
