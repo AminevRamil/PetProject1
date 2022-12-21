@@ -86,9 +86,4 @@ public class StartCommand extends BasicCommand {
         .replyMarkup(startKeyboardService.createForState(currentState, userOwnerId))
         .build();
   }
-
-  @Override
-  public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData) {
-
-  }
 }

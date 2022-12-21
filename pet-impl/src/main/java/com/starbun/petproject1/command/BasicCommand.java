@@ -32,7 +32,9 @@ public abstract class BasicCommand extends BotCommand {
 
   protected abstract CommandStates getCurrentState();
 
-  abstract public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData);
+  public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData){
+    throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
+  }
 
   /**
    * Необходимость заполнить эти два поля, делает невозможным создания простого конструктора
