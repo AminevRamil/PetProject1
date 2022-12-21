@@ -1,10 +1,9 @@
-package com.starbun.petproject1.command;
+package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.BasicCommand;
 import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
-import com.starbun.petproject1.service.DebtKeyboardService;
 import com.starbun.petproject1.service.TelegramUserService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,13 +14,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT_DRAFT;
-import static com.starbun.petproject1.command.DebtCommand.DebtCommandStates.DEBT_OPTIONS;
+import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates.DEBT_DRAFT;
+import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates.DEBT_OPTIONS;
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Slf4j
