@@ -4,11 +4,9 @@ import com.starbun.petproject1.dto.InlineButtonInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
+import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -24,7 +22,7 @@ import static com.starbun.petproject1.util.CommandsLifeCycleManager.TIME_TO_LIVE
  * чтоб её не надо было писать в самой команде
  */
 @Slf4j
-public abstract class BasicCommand extends BotCommand {
+public abstract class BasicCommand extends DefaultBotCommand {
 
   @Getter
   @Setter
@@ -57,11 +55,5 @@ public abstract class BasicCommand extends BotCommand {
       log.error("В ходе отправки сообщения произошла ошибка: ", e);
       throw new RuntimeException("В ходе отправки сообщения произошла ошибка", e);
     }
-  }
-
-  @Override
-  @Deprecated
-  public final void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-
   }
 }

@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates.DEBT_DRAFT;
@@ -60,16 +62,19 @@ public class DebtCommand extends BasicCommand {
     this.debtKeyboardService = debtKeyboardService;
   }
 
+  /**
+   * Обработка команды/сообщения начинающегося с /debt
+   */
   @Override
-  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+  public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
     currentState = DEBT_OPTIONS; //TODO Скорее всего стоит сделать свитч или какой-то механизм принятия решений
 
-    SendMessage sendMessage = SendMessage.builder()
-        .chatId(message.getChatId())
+    SendMessage message = SendMessage.builder()
+        .chatId(chat.getId())
         .text("Создать новый долг?")
         .replyMarkup(debtKeyboardService.createForState(currentState, userOwnerId))
         .build();
-    send(absSender, sendMessage);
+    send(absSender, message);
   }
 
   /**
@@ -92,6 +97,14 @@ public class DebtCommand extends BasicCommand {
     }
   }
 
+  /**
+   * Обработка обычных текстовых сообщений при работе с данной командойs
+   */
+  @Override
+  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+
+  }
+
   private EditMessageText changeMessageWithDraftInfo(Message originalMessage, DebtDraft draft, Long userId) {
     return EditMessageText.builder()
         .messageId(originalMessage.getMessageId())
@@ -109,5 +122,4 @@ public class DebtCommand extends BasicCommand {
         "Статус погашения: " + (draft.getRedemptionStatus() ? "Долг погашен" : "Долг не погашен") + "\n" +
         "Дата долга: " + (draft.getDebtDate() != null ? draft.getDebtDate() : "Не указана");
   }
-
 }

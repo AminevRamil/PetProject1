@@ -29,6 +29,13 @@ public class MessageProcessorImpl implements MessageProcessor {
 
     TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
     BasicCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId());
-    commandByUserId.processMessage(absSender, message, null);
+    if (message.isCommand()) {
+      // TODO 1 Если пришедший код команды не совпадает с тем, что в хранилище, то пересоздать команду.
+      // TODO 2 как вариант сделать метод для закрытия команды и она проверяет, можно ли себя закрыть на данном этапе или нет
+      // TODO 2.1 Проверять можно по текущему состоянию (MAX_INT)
+      commandByUserId.execute(absSender, message.getFrom(), message.getChat(), message.getMessageId(), null);
+    } else {
+      commandByUserId.processMessage(absSender, message, null);
+    }
   }
 }

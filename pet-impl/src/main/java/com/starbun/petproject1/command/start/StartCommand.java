@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import static com.starbun.petproject1.command.start.StartCommand.StartCommandStates.START_OPTIONS;
@@ -59,20 +60,28 @@ public class StartCommand extends BasicCommand {
    * Метод срабатывает только при наличии "/start" в начале текстового сообщения
    */
   @Override
-  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-    switch (message.getChat().getType()) {
+  public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
+    switch (chat.getType()) {
       case "private" -> {
-        TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
-        SendMessage greetingsMessage = createGreetingsMessage(message.getChat(), telegramUser);
+        TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
+        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser);
         send(absSender, greetingsMessage);
       }
       case "group", "channel", "supergroup" -> {
-        throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + message.getChat().getType());
+        throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + chat.getType());
       }
       default -> {
-        throw new TelegramApiMismatchException("Сообщение пришло из чата неизвестного типа: " + message.getChat().getType());
+        throw new TelegramApiMismatchException("Сообщение пришло из чата неизвестного типа: " + chat.getType());
       }
     }
+  }
+
+  /**
+   * Обработка обычных текстовых сообщений при работе с данной командойs
+   */
+  @Override
+  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+
   }
 
   /**
