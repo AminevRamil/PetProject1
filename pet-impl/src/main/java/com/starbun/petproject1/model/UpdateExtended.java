@@ -42,7 +42,7 @@ public class UpdateExtended extends Update {
       updateType = UpdateType.CHANNEL_POST;
       safeCounter++;
     }
-    if (update.hasEditedMessage()) {
+    if (update.hasEditedChannelPost()) {
       updateType = UpdateType.EDITED_CHANNEL_POST;
       safeCounter++;
     }
