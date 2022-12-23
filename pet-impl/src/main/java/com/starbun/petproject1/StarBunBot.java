@@ -4,6 +4,7 @@ import com.starbun.petproject1.command.BasicCommand;
 import com.starbun.petproject1.processor.UpdateProcessor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Slf4j
 @Component("StarBunBot")
 @RequiredArgsConstructor
 public class StarBunBot extends TelegramLongPollingBot {
@@ -63,6 +65,7 @@ public class StarBunBot extends TelegramLongPollingBot {
   @Override
   public void onRegister() {
     super.onRegister();
+    log.info("Бот успешно зарегистрирован в Telegram API");
     // TODO Можно кинуть уведомление о старте бота
   }
 }
