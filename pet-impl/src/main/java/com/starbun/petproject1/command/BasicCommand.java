@@ -2,6 +2,7 @@ package com.starbun.petproject1.command;
 
 import com.starbun.petproject1.dto.InlineButtonInfo;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
@@ -26,9 +27,14 @@ public abstract class BasicCommand extends DefaultBotCommand {
 
   @Getter
   @Setter
-  private LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TIME_TO_LIVE);
+  protected LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TIME_TO_LIVE);
 
-  protected abstract CommandStates getCurrentState();
+  @Setter
+  @Getter
+  protected Long userOwnerId;
+
+  @Getter
+  protected CommandStates currentState;
 
   public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData){
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
