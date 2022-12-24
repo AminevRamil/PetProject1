@@ -10,8 +10,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.util.Arrays;
 
-import static com.starbun.petproject1.command.start.StartCommand.StartCommandStates;
-
 @Component
 @AllArgsConstructor
 public class StartKeyboardService extends InlineKeyboardService {

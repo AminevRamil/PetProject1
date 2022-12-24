@@ -21,8 +21,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates.DEBT_DRAFT;
-import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates.DEBT_OPTIONS;
+import static com.starbun.petproject1.command.debt.DebtCommandStates.DEBT_DRAFT;
+import static com.starbun.petproject1.command.debt.DebtCommandStates.DEBT_OPTIONS;
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Slf4j
@@ -30,20 +30,7 @@ import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DebtCommand extends BasicCommand {
 
-  /**
-   * Все состояния работы с пользователем, в которых может пребывать данная команда
-   */
-  @Getter
-  @AllArgsConstructor
-  public enum DebtCommandStates implements CommandStates {
-    DEBT_OPTIONS(0, "DEBT_OPTIONS"),
-    DEBT_CREATE(1, "DEBT_CREATE"),
-    DEBT_DRAFT(2, "DEBT_CREATE"),
-    DEBT_INPUT(3, "DEBT_INPUT"),
-    DEBT_END(Integer.MAX_VALUE, "DEBT_END");
-    private final Integer id;
-    private final String name;
-  }
+
 
   // Операционные данные (состояние команды)
   private DebtCommandStates currentState = DEBT_OPTIONS;
