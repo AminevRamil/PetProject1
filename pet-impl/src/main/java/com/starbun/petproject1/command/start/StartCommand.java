@@ -20,30 +20,17 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.starbun.petproject1.command.start.StartCommand.StartCommandStates.START_OPTIONS;
+import static com.starbun.petproject1.command.start.StartCommandStates.START_OPTIONS;
 
 @Slf4j
 @Component(CommandNames.COMMAND_START)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class StartCommand extends BasicCommand {
 
-  /**
-   * Все состояния работы с пользователем, в которых может пребывать данная команда
-   */
-  @Getter
-  @AllArgsConstructor
-  public enum StartCommandStates implements CommandStates {
-    START_OPTIONS(0, "START_OPTIONS"),
-    START_END(Integer.MAX_VALUE, "START_END");
-    private final Integer id;
-    private final String name;
-    // private boolean camBeEasilyEnded; ???
-  }
-
   @Getter
   @Setter
   // Операционные данные (состояние команды)
-  private StartCommand.StartCommandStates currentState = START_OPTIONS;
+  private StartCommandStates currentState = START_OPTIONS;
 
   // Бины/сервисы
   private final TelegramUserService telegramUserService;
