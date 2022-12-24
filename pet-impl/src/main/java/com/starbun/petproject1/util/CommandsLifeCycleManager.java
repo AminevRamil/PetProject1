@@ -1,7 +1,7 @@
 package com.starbun.petproject1.util;
 
 import com.starbun.petproject1.command.BasicCommand;
-import com.starbun.petproject1.command.start.StartCommand;
+import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.service.CommandFactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +27,8 @@ public class CommandsLifeCycleManager {
 
   /**
    * Название команды создаваемой по умолчанию
-   * TODO Сделать какое-то хранилище названий команд, интерфейс или класс с константами.
    */
-  private static final String DEFAULT_COMMAND = "start";
+  private static final String DEFAULT_COMMAND = CommandNames.COMMAND_START;
 
   private final Map<Long, BasicCommand> userToCommandMap = new HashMap<>();
 

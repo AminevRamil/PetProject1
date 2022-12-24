@@ -1,6 +1,7 @@
 package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
@@ -25,7 +26,7 @@ import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Slf4j
-@Component("debt")
+@Component(CommandNames.COMMAND_DEBT)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DebtCommand extends BasicCommand {
 
@@ -54,7 +55,7 @@ public class DebtCommand extends BasicCommand {
 
 
   public DebtCommand(TelegramUserService telegramUserService, DebtKeyboardService debtKeyboardService) {
-    super("debt", "Учёт долгов");
+    super(CommandNames.COMMAND_DEBT, "Учёт долгов");
     this.telegramUserService = telegramUserService;
     this.debtKeyboardService = debtKeyboardService;
   }
