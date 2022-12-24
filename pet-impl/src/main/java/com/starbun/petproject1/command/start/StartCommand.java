@@ -2,7 +2,6 @@ package com.starbun.petproject1.command.start;
 
 import com.starbun.petproject1.command.BasicCommand;
 import com.starbun.petproject1.command.CommandStates;
-import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
@@ -11,10 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -23,8 +22,8 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import static com.starbun.petproject1.command.start.StartCommand.StartCommandStates.START_OPTIONS;
 
 @Slf4j
-@Component
-@Scope("prototype")
+@Component("start")
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class StartCommand extends BasicCommand {
 
   /**
@@ -37,14 +36,13 @@ public class StartCommand extends BasicCommand {
     START_END(Integer.MAX_VALUE, "START_END");
     private final Integer id;
     private final String name;
+    // private boolean camBeEasilyEnded; ???
   }
 
-  // Операционные данные (состояние команды)
   @Getter
-  private StartCommand.StartCommandStates currentState = START_OPTIONS;
   @Setter
-  @Getter
-  private Long userOwnerId;
+  // Операционные данные (состояние команды)
+  private StartCommand.StartCommandStates currentState = START_OPTIONS;
 
   // Бины/сервисы
   private final TelegramUserService telegramUserService;

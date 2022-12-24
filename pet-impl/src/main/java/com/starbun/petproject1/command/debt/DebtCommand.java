@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -24,8 +25,8 @@ import static com.starbun.petproject1.command.debt.DebtCommand.DebtCommandStates
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Slf4j
-@Component
-@Scope("prototype")
+@Component("debt")
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DebtCommand extends BasicCommand {
 
   /**
@@ -44,12 +45,8 @@ public class DebtCommand extends BasicCommand {
   }
 
   // Операционные данные (состояние команды)
-  @Getter
   private DebtCommandStates currentState = DEBT_OPTIONS;
   private DebtDraft currentEditingDebt;
-  @Setter
-  @Getter
-  private Long userOwnerId;
 
   // Бины/сервисы
   private final TelegramUserService telegramUserService;
