@@ -1,6 +1,7 @@
 package com.starbun.petproject1.command.start;
 
 import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.exception.NoImplementationException;
@@ -22,7 +23,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import static com.starbun.petproject1.command.start.StartCommand.StartCommandStates.START_OPTIONS;
 
 @Slf4j
-@Component("start")
+@Component(CommandNames.COMMAND_START)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class StartCommand extends BasicCommand {
 
@@ -49,7 +50,7 @@ public class StartCommand extends BasicCommand {
   private final StartKeyboardService startKeyboardService;
 
   public StartCommand(TelegramUserService telegramUserService, StartKeyboardService startKeyboardService) {
-    super("start", "Стартовая команда бота");
+    super(CommandNames.COMMAND_START, "Стартовая команда бота");
     this.telegramUserService = telegramUserService;
     this.startKeyboardService = startKeyboardService;
   }
@@ -75,7 +76,7 @@ public class StartCommand extends BasicCommand {
   }
 
   /**
-   * Обработка обычных текстовых сообщений при работе с данной командойs
+   * Обработка обычных текстовых сообщений при работе с данной командой
    */
   @Override
   public void processMessage(AbsSender absSender, Message message, String[] arguments) {
