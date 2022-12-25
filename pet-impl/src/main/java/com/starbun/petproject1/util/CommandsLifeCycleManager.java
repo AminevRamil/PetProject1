@@ -58,12 +58,12 @@ public class CommandsLifeCycleManager {
    * Если предыдущая сессия с пользователем НЕ завершена, то пытается закрыть предыдущую сессию и создать новую.
    *
    * @param userId      внутренний идентификатор пользователя
-   * @param commandName команда, которую задал пользователь
+   * @param commandName команда, которую задал пользователь. Если null, то пользователь не хочет менять команду
    * @return команду с которой работает пользователь
    */
   public BasicCommand getCommandByUserId(Long userId, String commandName) {
     BasicCommand command = userToCommandMap.containsKey(userId) ? getUserCommandAndUpdateExpiryDate(userId) : getDefaultCommand(userId);
-    return command.getCommandIdentifier().equals(commandName) ? command : tryToCloseOldCommandAndGetNew(command, commandName, userId);
+    return command.getCommandIdentifier().equals(commandName) || commandName == null ? command : tryToCloseOldCommandAndGetNew(command, commandName, userId);
   }
 
   public BasicCommand getCommandByUserId(Long userId) {

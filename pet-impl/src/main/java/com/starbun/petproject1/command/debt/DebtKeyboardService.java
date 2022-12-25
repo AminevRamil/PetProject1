@@ -1,7 +1,6 @@
 package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.CommandStates;
-import com.starbun.petproject1.dto.ButtonAction;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.service.InlineKeyboardService;
 import org.springframework.stereotype.Component;
@@ -9,6 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.util.Arrays;
 import java.util.Collections;
+
+import static com.starbun.petproject1.command.debt.DebtKeyboardActions.*;
 
 /**
  * Фабрика? Абстрактная фабрика? Фабричный метод?
@@ -32,37 +33,31 @@ public class DebtKeyboardService extends InlineKeyboardService {
 
   /**
    * Создание клавиатуры под сообщением с драфтом долга
-   *
-   * @param userId идентификатор пользователя телеграм для которого создаётся клавиатура
-   * @return готовую инлайн-клавиатуру
    */
   private InlineKeyboardMarkup debtDraftKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Arrays.asList(
-            createButton(ButtonAction.CHANGE_DEBTOR, userId, "Указать должника"),
-            createButton(ButtonAction.CHANGE_DEBT_SUBJECT, userId, "Указать предмет долга")))
+            createButton("Указать должника", DEBT_SET_DEBTOR, userId),
+            createButton("Указать предмет долга", DEBT_SET_SUBJECT, userId)))
         .keyboardRow(Arrays.asList(
-            createButton(ButtonAction.CHANGE_DEBT_STATUS, userId, "Указать статус погашения"),
-            createButton(ButtonAction.CHANGE_DATE, userId, "Указать дату возврата (опц.)")))
+            createButton("Указать статус погашения", DEBT_SET_STATUS, userId),
+            createButton("Указать дату возврата (опц.)", DEBT_SET_DATE, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton(ButtonAction.SAVE_DEBT, userId, "Сохранить")))
+            createButton("Сохранить", DEBT_SAVE, userId)))
         .build();
   }
 
   /**
    * Создание клавиатуры под сообщением с предложением создания нового долга
-   *
-   * @param userId идентификатор пользователя телеграм для которого создаётся клавиатура
-   * @return готовую инлайн-клавиатуру
    */
   private InlineKeyboardMarkup debtCreateKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Collections.singletonList(
-            createButton(ButtonAction.CREATE_DEBT, userId, "Да")))
+            createButton("Да", DEBT_CREATE, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton(ButtonAction.SELECT_DEBT, userId, "Просмотр долгов")))
+            createButton("Просмотр долгов", DEBT_SHOW_ALL, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton(ButtonAction.SELECT_DEBT, userId, "Редактировать долг")))
+            createButton("Редактировать долг", DEBT_CHANGE, userId)))
         .build();
   }
 }

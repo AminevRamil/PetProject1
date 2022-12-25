@@ -50,7 +50,7 @@ public class StartCommand extends BasicCommand {
     switch (chat.getType()) {
       case "private" -> {
         TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
-        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser);
+        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser, userOwnerId);
         send(absSender, greetingsMessage);
       }
       case "group", "channel", "supergroup" -> {
@@ -73,12 +73,12 @@ public class StartCommand extends BasicCommand {
   /**
    * Создание начального приветственного сообщения
    */
-  private SendMessage createGreetingsMessage(Chat chat, TelegramUserDto telegramUser) {
+  private SendMessage createGreetingsMessage(Chat chat, TelegramUserDto telegramUser, Long userId) {
     return SendMessage.builder()
         .chatId(chat.getId())
         .text("Стартуем, " + telegramUser.getActualUsername() + "!")
         .parseMode("Markdown")
-        .replyMarkup(startKeyboardService.createForState(currentState, userOwnerId))
+        .replyMarkup(startKeyboardService.createForState(currentState, userId))
         .build();
   }
 }

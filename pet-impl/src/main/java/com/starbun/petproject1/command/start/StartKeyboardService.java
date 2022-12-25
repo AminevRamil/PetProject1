@@ -1,7 +1,6 @@
 package com.starbun.petproject1.command.start;
 
 import com.starbun.petproject1.command.CommandStates;
-import com.starbun.petproject1.dto.ButtonAction;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.service.InlineKeyboardService;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.Arrays;
+
+import static com.starbun.petproject1.command.start.StartKeyboardActions.RESTART;
+import static com.starbun.petproject1.command.start.StartKeyboardActions.SHOW_MENU;
 
 @Component
 @AllArgsConstructor
@@ -30,9 +32,9 @@ public class StartKeyboardService extends InlineKeyboardService {
   private InlineKeyboardMarkup startKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Arrays.asList(
-            createButton(ButtonAction.SHOW_MENU, userId, "Показать меню")))
+            createButton("Показать меню", SHOW_MENU, userId)))
         .keyboardRow(Arrays.asList(
-            createButton(ButtonAction.RESTART, userId, "Ре-стартуем!")))
+            createButton("Ре-стартуем!", RESTART, userId)))
         .build();
   }
 }

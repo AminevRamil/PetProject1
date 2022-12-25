@@ -33,7 +33,7 @@ public abstract class BasicCommand extends DefaultBotCommand {
   @Getter
   protected CommandStates currentState;
 
-  public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData){
+  public void executeInlineButton(AbsSender absSender, CallbackQuery message){
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
   }
 
