@@ -1,13 +1,13 @@
 package com.starbun.petproject1.command;
 
-import com.starbun.petproject1.dto.InlineButtonInfo;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.starbun.petproject1.util.CommandsLifeCycleManager.TIME_TO_LIVE;
+import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 /**
  * Базовый класс для всех команд. Содержит в себе элементы общей логики и необходимые для работы команды поля.
@@ -33,6 +34,8 @@ public abstract class BasicCommand extends DefaultBotCommand {
   @Getter
   protected CommandStates currentState;
 
+  protected Message lastMessageFromBot;
+
   public void executeInlineButton(AbsSender absSender, CallbackQuery message){
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
   }
@@ -45,6 +48,23 @@ public abstract class BasicCommand extends DefaultBotCommand {
    */
   public BasicCommand(String commandIdentifier, String description) {
     super(commandIdentifier, description);
+  }
+
+  /**
+   * Обработка обычных текстовых сообщений при работе с данной командой
+   */
+  @Override
+  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
+    if (lastMessageFromBot == null) {
+      return;
+    }
+    SendMessage sendMessage = SendMessage.builder()
+        .replyToMessageId(lastMessageFromBot.getMessageId())
+        .chatId(lastMessageFromBot.getChatId())
+        .parseMode(MARKDOWN)
+        .text("Данная команда не поддерживает работу с текстом. Используйте кнопки")
+        .build();
+    send(absSender, sendMessage);
   }
 
   /**
