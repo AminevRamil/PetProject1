@@ -17,9 +17,20 @@ public class InlineButtonInfo {
    * Идентификатор пользователя в телеграм,
    * который спровоцировал появление кнопки (владелец кнопки?)
    */
-  private Long uId;
+  private Long userId;
+
   /**
-   * Тип кнопки
+   * Код кнопки
    */
-  private ButtonAction bAction;
+  private Integer keyboardActionCode;
+
+  public InlineButtonInfo(String argsInOneLine) {
+    String[] s = argsInOneLine.split(" ");
+    this.userId = Long.valueOf(s[0]);
+    this.keyboardActionCode = Integer.valueOf(s[1]);
+  }
+
+  public String intoButtonData() {
+    return String.format("%d %d", userId, keyboardActionCode);
+  }
 }

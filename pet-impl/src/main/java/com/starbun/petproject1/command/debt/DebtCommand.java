@@ -67,7 +67,7 @@ public class DebtCommand extends BasicCommand {
    * @implNote Переделать без свитчей. Хендлеры?
    */
   @Override
-  public void executeInlineButton(AbsSender absSender, CallbackQuery message, InlineButtonInfo buttonData) {
+  public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
 
     switch (currentState) {
       case DEBT_CREATE -> {
@@ -75,7 +75,7 @@ public class DebtCommand extends BasicCommand {
         if (currentEditingDebt == null) {
           currentEditingDebt = new DebtDraft();
         }
-        EditMessageText editMessage = changeMessageWithDraftInfo(message.getMessage(), currentEditingDebt, buttonData.getUId());
+        EditMessageText editMessage = changeMessageWithDraftInfo(callbackQuery.getMessage(), currentEditingDebt, callbackQuery.getFrom().getId());
         send(absSender, editMessage);
       }
       default -> throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
