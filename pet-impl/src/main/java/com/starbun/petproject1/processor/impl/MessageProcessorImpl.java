@@ -39,8 +39,14 @@ public class MessageProcessorImpl implements MessageProcessor {
       // TODO 2.1 Проверять можно по текущему состоянию (MAX_INT)
       commandByUserId.execute(absSender, message.getFrom(), message.getChat(), message.getMessageId(), null);
     } else {
-      processNonCommandMessage(message);
+      processNonCommandMessage(absSender, message);
     }
+  }
+
+  private void processNonCommandMessage(AbsSender absSender, Message message) {
+    TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
+    BasicCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), null);
+    commandByUserId.processMessage(absSender, message, null);
   }
 
   /**
@@ -60,7 +66,4 @@ public class MessageProcessorImpl implements MessageProcessor {
         .orElseThrow(() -> new IllegalArgumentException("В данном сообщении нет команды в начале: messageId " + message.getMessageId()));
   }
 
-  private void processNonCommandMessage(Message message) {
-
-  }
 }

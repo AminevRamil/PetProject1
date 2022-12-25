@@ -2,13 +2,8 @@ package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.BasicCommand;
 import com.starbun.petproject1.command.CommandNames;
-import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.dto.DebtDraft;
-import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.service.TelegramUserService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -59,7 +54,7 @@ public class DebtCommand extends BasicCommand {
         .text("Создать новый долг?")
         .replyMarkup(debtKeyboardService.createForState(currentState, userOwnerId))
         .build();
-    send(absSender, message);
+    lastMessageFromBot = send(absSender, message);
   }
 
   /**
@@ -80,14 +75,6 @@ public class DebtCommand extends BasicCommand {
       }
       default -> throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
     }
-  }
-
-  /**
-   * Обработка обычных текстовых сообщений при работе с данной командойs
-   */
-  @Override
-  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-
   }
 
   private EditMessageText changeMessageWithDraftInfo(Message originalMessage, DebtDraft draft, Long userId) {

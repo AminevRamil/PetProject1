@@ -51,7 +51,7 @@ public class StartCommand extends BasicCommand {
       case "private" -> {
         TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
         SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser, userOwnerId);
-        send(absSender, greetingsMessage);
+        lastMessageFromBot = send(absSender, greetingsMessage);
       }
       case "group", "channel", "supergroup" -> {
         throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + chat.getType());
@@ -60,14 +60,6 @@ public class StartCommand extends BasicCommand {
         throw new TelegramApiMismatchException("Сообщение пришло из чата неизвестного типа: " + chat.getType());
       }
     }
-  }
-
-  /**
-   * Обработка обычных текстовых сообщений при работе с данной командой
-   */
-  @Override
-  public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-
   }
 
   /**
