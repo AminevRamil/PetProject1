@@ -21,10 +21,10 @@ public class DebtKeyboardService extends InlineKeyboardService {
   public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
     DebtCommandStates debtState = (DebtCommandStates) state;
     switch (debtState) {
-      case DEBT_OPTIONS, DEBT_CREATE -> {
+      case DEBT_BEGIN, DEBT_CHOSE -> {
         return debtCreateKeyboard(userId);
       }
-      case DEBT_DRAFT -> {
+      case DEBT_EDIT -> {
         return debtDraftKeyboard(userId);
       }
       default -> throw new NoImplementationException("Для данного состояния не существует инлайн клавиатуры: " + state);
@@ -37,13 +37,13 @@ public class DebtKeyboardService extends InlineKeyboardService {
   private InlineKeyboardMarkup debtDraftKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Arrays.asList(
-            createButton("Указать должника", DEBT_SET_DEBTOR, userId),
-            createButton("Указать предмет долга", DEBT_SET_SUBJECT, userId)))
+            createButton("Указать должника", SET_DEBTOR, userId),
+            createButton("Указать предмет долга", SET_SUBJECT, userId)))
         .keyboardRow(Arrays.asList(
-            createButton("Указать статус погашения", DEBT_SET_STATUS, userId),
-            createButton("Указать дату возврата (опц.)", DEBT_SET_DATE, userId)))
+            createButton("Указать статус погашения", SET_STATUS, userId),
+            createButton("Указать дату возврата (опц.)", SET_DATE, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton("Сохранить", DEBT_SAVE, userId)))
+            createButton("Сохранить", SAVE_DEBT, userId)))
         .build();
   }
 
@@ -53,11 +53,11 @@ public class DebtKeyboardService extends InlineKeyboardService {
   private InlineKeyboardMarkup debtCreateKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Collections.singletonList(
-            createButton("Да", DEBT_CREATE, userId)))
+            createButton("Да", CREATE_DEBT, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton("Просмотр долгов", DEBT_SHOW_ALL, userId)))
+            createButton("Просмотр долгов", SHOW_ALL, userId)))
         .keyboardRow(Collections.singletonList(
-            createButton("Редактировать долг", DEBT_CHANGE, userId)))
+            createButton("Редактировать долг", EDIT_EXISTING, userId)))
         .build();
   }
 }
