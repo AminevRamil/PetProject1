@@ -10,5 +10,5 @@ public enum StartKeyboardActions implements KeyboardAction {
   RESTART(1);
 
   @Getter
-  int code;
+  private Integer code;
 }

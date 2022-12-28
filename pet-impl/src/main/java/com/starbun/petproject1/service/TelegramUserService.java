@@ -53,42 +53,4 @@ public class TelegramUserService {
     }
     existingUser.setIsActual(true);
   }
-
-//  /**
-//   * Выгрузка текущего состояния работы пользователя с ботом и создание начального состояния, если
-//   * пользователь ранее с ботом не работал.
-//   * @param tgId идентификатор пользователя
-//   */
-//  @Transactional
-//  public UserStateDto getCurrentStatus(Long tgId) {
-//    Optional<UserState> userStateOpt = userStateRepository.findById(tgId);
-//    UserState userState = userStateOpt.orElse(createBeginState(tgId));
-//    return userStateMapper.toDto(userState);
-//  }
-
-//  /**
-//   * Смена статуса работы с ботом для указанного пользователя
-//   * @param tgId идентификатор пользователя в телеграм
-//   * @param newStatus новый статус работы с ботом
-//   * @return объект хранящий информацию о текущем состоянии работы с ботом
-//   */
-//  @Transactional
-//  public UserStateDto getCurrentStatusAndMakeTransition(Long tgId, State newStatus) {
-//    Optional<UserState> userStateOpt = userStateRepository.findById(tgId);
-//    UserState userState = userStateOpt.orElse(createBeginState(tgId));
-//    userState.setCurrentState(newStatus);
-//    return userStateMapper.toDto(userState);
-//  }
-
-//  /**
-//   * Создание новой записи о состоянии бота для конкретного пользователя
-//   * @param tgId идентификатор пользователя
-//   * @return состояние пользователя
-//   */
-//  private UserState createBeginState(Long tgId) {
-//    UserState newUserState = new UserState();
-//    newUserState.setTgId(tgId);
-//    newUserState.setCurrentState(State.BEGIN);
-//    return userStateRepository.save(newUserState);
-//  }
 }

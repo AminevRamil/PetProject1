@@ -12,7 +12,7 @@ import lombok.Getter;
 public enum StartCommandStates implements CommandStates {
   START_OPTIONS(0, "START_OPTIONS"),
   START_END(Integer.MAX_VALUE, "START_END");
-  private final Integer id;
+  private final Integer code;
   private final String name;
   // private boolean camBeEasilyEnded; ???
 }

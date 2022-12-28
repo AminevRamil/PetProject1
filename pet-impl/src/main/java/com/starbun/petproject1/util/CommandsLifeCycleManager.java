@@ -75,7 +75,7 @@ public class CommandsLifeCycleManager {
    * @implNote Недоделана. В любом случае создаёт новую команду
    */
   private BasicCommand tryToCloseOldCommandAndGetNew(BasicCommand command, String commandName, Long userId) {
-    if (command.getCurrentState().getId().equals(Integer.MAX_VALUE)) {
+    if (command.getCurrentState().getCode().equals(Integer.MAX_VALUE)) {
       BasicCommand newCommand = commandFactory.createCommand(commandName);
       storeNewCommand(newCommand, userId);
       return newCommand;

@@ -1,30 +1,38 @@
 package com.starbun.petproject1.command.debt;
 
-
 import com.starbun.petproject1.command.KeyboardAction;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum DebtKeyboardActions implements KeyboardAction {
-  DEBT_OPTIONS(0),
-  DEBT_CREATE(1),
-  DEBT_END(2),
-  DEBT_SHOW_ALL(3),
-  DEBT_SET_DEBTOR(4),
-  DEBT_SET_DATE(5),
-  DEBT_SET_SUBJECT(6),
-  DEBT_SET_STATUS(6),
-  DEBT_CANCEL(7),
-  DEBT_SAVE(8),
-  DEBT_DELETE(9),
-  DEBT_CHANGE(10),
-  DEBT_NEXT(11);
+  EDIT_EXISTING(0, "EDIT_EXISTING"),
+  PICK_DEBT(1, "PICK_DEBT"),
+  CREATE_DEBT(2, "CREATE_DEBT"),
+  SET_DEBTOR(3, "SET_A"),
+  SET_SUBJECT(4, "SET_B"),
+  SET_STATUS(5, "SET_C"),
+  SET_DATE(6, "SET_C"),
+  WRONG_INPUT(7, "WRONG_INPUT"),
+  ACCEPT(8, "ACCEPT"),
+  CANCEL(9, "CANCEL"),
+  SAVE_DEBT(10, "SAVE_DEBT"),
+  SHOW_ALL(11, "SHOW_ALL" ),
+  CHOSE_LEFT(12, "CHOSE_LEFT" ),
+  CHOSE_RIGHT(13, "CHOSE_RIGHT" );
 
   @Getter
-  private final int code;
+  private final Integer code;
 
-  public String prepareButtonInfo() {
-    return Integer.toString(code);
+  @Getter
+  private final String name;
+
+  public static DebtKeyboardActions fromCode(Integer code) {
+    for (var action : DebtKeyboardActions.values()) {
+      if (action.getCode().equals(code)) {
+        return action;
+      }
+    }
+    throw new IllegalArgumentException("Неверный код для действия DebtKeyboardActions: " + code);
   }
 }
