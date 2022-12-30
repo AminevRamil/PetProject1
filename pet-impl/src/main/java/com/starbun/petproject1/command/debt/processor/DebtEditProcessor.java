@@ -1,19 +1,21 @@
 package com.starbun.petproject1.command.debt.processor;
 
 
-import com.starbun.petproject1.command.StateProcessor;
-import com.starbun.petproject1.command.debt.DebtCommandStates;
-import com.starbun.petproject1.command.debt.DebtKeyboardActions;
+import com.starbun.petproject1.command.AbstractStateProcessor;
+import com.starbun.petproject1.command.debt.state.DebtState;
+import com.starbun.petproject1.command.debt.state.DebtActions;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
-public class DebtEditProcessor implements StateProcessor<DebtKeyboardActions> {
+public class DebtEditProcessor extends AbstractStateProcessor<DebtState, DebtActions> {
   @Getter
-  private final DebtCommandStates processingState = DebtCommandStates.DEBT_EDIT;
+  private final DebtState processingState = DebtState.DEBT_EDIT;
 
   @Override
-  public void process(DebtKeyboardActions action) {
-
+  public void process(DebtActions action) {
+    log.info("DebtEditProcessor action: " + action.getName());
   }
 }

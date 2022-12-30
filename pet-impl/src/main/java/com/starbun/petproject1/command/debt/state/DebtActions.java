@@ -1,18 +1,22 @@
-package com.starbun.petproject1.command.debt;
+package com.starbun.petproject1.command.debt.state;
 
-import com.starbun.petproject1.command.KeyboardAction;
+import com.starbun.petproject1.command.CommandActions;
+import com.starbun.petproject1.command.start.StartActions;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Действия выполняемы в ходе работы команды /debt
+ */
 @RequiredArgsConstructor
-public enum DebtKeyboardActions implements KeyboardAction {
+public enum DebtActions implements CommandActions {
   EDIT_EXISTING(0, "EDIT_EXISTING"),
   PICK_DEBT(1, "PICK_DEBT"),
   CREATE_DEBT(2, "CREATE_DEBT"),
-  SET_DEBTOR(3, "SET_A"),
-  SET_SUBJECT(4, "SET_B"),
-  SET_STATUS(5, "SET_C"),
-  SET_DATE(6, "SET_C"),
+  SET_DEBTOR(3, "SET_DEBTOR"),
+  SET_SUBJECT(4, "SET_SUBJECT"),
+  SET_STATUS(5, "SET_STATUS"),
+  SET_DATE(6, "SET_DATE"),
   WRONG_INPUT(7, "WRONG_INPUT"),
   ACCEPT(8, "ACCEPT"),
   CANCEL(9, "CANCEL"),
@@ -27,8 +31,8 @@ public enum DebtKeyboardActions implements KeyboardAction {
   @Getter
   private final String name;
 
-  public static DebtKeyboardActions fromCode(Integer code) {
-    for (var action : DebtKeyboardActions.values()) {
+  public static DebtActions fromCode(Integer code) {
+    for (var action : DebtActions.values()) {
       if (action.getCode().equals(code)) {
         return action;
       }

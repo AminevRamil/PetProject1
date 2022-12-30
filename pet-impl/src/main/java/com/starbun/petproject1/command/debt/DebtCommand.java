@@ -1,11 +1,15 @@
 package com.starbun.petproject1.command.debt;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractStateProcessor;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.command.CommandNames;
-import com.starbun.petproject1.command.StateProcessor;
+import com.starbun.petproject1.command.debt.state.DebtActions;
+import com.starbun.petproject1.command.debt.state.DebtState;
+import com.starbun.petproject1.command.debt.state.DebtStateMachine;
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.service.TelegramUserService;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -20,23 +24,24 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import java.util.List;
 
-import static com.starbun.petproject1.command.debt.DebtCommandStates.DEBT_EDIT;
+import static com.starbun.petproject1.command.debt.state.DebtState.DEBT_EDIT;
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 @Slf4j
 @Component(CommandNames.COMMAND_DEBT)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class DebtCommand extends BasicCommand {
+public class DebtCommand extends AbstractCommand {
 
   // Операционные данные (состояние команды)
-  private DebtStateMachine stateMachine;
+  @Getter
+  private final DebtStateMachine stateMachine;
 
   // Бины/сервисы
   private final TelegramUserService telegramUserService;
   private final DebtKeyboardService debtKeyboardService;
 
 
-  public DebtCommand(TelegramUserService telegramUserService, DebtKeyboardService debtKeyboardService, List<StateProcessor<DebtKeyboardActions>> processors) {
+  public DebtCommand(TelegramUserService telegramUserService, DebtKeyboardService debtKeyboardService, List<AbstractStateProcessor<DebtState, DebtActions>> processors) {
     super(CommandNames.COMMAND_DEBT, "Учёт долгов");
     this.telegramUserService = telegramUserService;
     this.debtKeyboardService = debtKeyboardService;
@@ -51,7 +56,7 @@ public class DebtCommand extends BasicCommand {
     SendMessage message = SendMessage.builder()
         .chatId(chat.getId())
         .text("Создать новый долг?")
-        .replyMarkup(debtKeyboardService.createForState(currentState, userOwnerId))
+        .replyMarkup(debtKeyboardService.createForState(stateMachine.getCurrentState(), stateMachine.getUserOwnerId()))
         .build();
     lastMessageFromBot = send(absSender, message);
   }
@@ -64,7 +69,7 @@ public class DebtCommand extends BasicCommand {
   public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
 
     var info = new InlineButtonInfo(callbackQuery.getData());
-    var action = DebtKeyboardActions.fromCode(info.getKeyboardActionCode());
+    var action = DebtActions.fromCode(info.getKeyboardActionCode());
 
     try {
       stateMachine.performAction(action);

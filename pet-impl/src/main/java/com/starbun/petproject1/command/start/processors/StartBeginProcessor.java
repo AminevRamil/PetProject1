@@ -1,20 +1,20 @@
 package com.starbun.petproject1.command.start.processors;
 
-import com.starbun.petproject1.command.StateProcessor;
-import com.starbun.petproject1.command.start.StartCommandStates;
-import com.starbun.petproject1.command.start.StartKeyboardActions;
+import com.starbun.petproject1.command.AbstractStateProcessor;
+import com.starbun.petproject1.command.start.StartState;
+import com.starbun.petproject1.command.start.StartActions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class StartBeginProcessor implements StateProcessor<StartKeyboardActions> {
+public class StartBeginProcessor extends AbstractStateProcessor<StartState, StartActions> {
   @Getter
-  private final StartCommandStates processingState = StartCommandStates.START_OPTIONS;
+  private final StartState processingState = StartState.START_BEGIN;
 
   @Override
-  public void process(StartKeyboardActions action) {
-
+  public void process(StartActions action) {
+    log.info("DebtBeginProcessor action: " + action.getName());
   }
 }

@@ -18,23 +18,29 @@ import static com.starbun.petproject1.util.CommandsLifeCycleManager.TIME_TO_LIVE
 import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 /**
- * Базовый класс для всех команд. Содержит в себе элементы общей логики и необходимые для работы команды поля.
+ * Абстрактный класс для всех команд. Содержит в себе элементы общей логики и необходимые для работы команды поля.
  */
 @Slf4j
-public abstract class BasicCommand extends DefaultBotCommand {
+public abstract class AbstractCommand extends DefaultBotCommand {
 
+  /**
+   * Срок годности команды, после которого сессия завершится
+   */
   @Getter
   @Setter
   protected LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TIME_TO_LIVE);
 
-  @Setter
-  @Getter
-  protected Long userOwnerId;
-
-  @Getter
-  protected CommandStates currentState;
-
+  /**
+   * Объект с информацией о последнем сообщении бота
+   */
   protected Message lastMessageFromBot;
+
+  /**
+   * Машина состояний для обработки действий пользователя
+   * @see AbstractStateMachine
+   */
+  @Getter
+  protected AbstractStateMachine<? extends CommandStates<? extends CommandActions>, ? extends CommandActions> stateMachine;
 
   public void executeInlineButton(AbsSender absSender, CallbackQuery message){
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
@@ -46,7 +52,7 @@ public abstract class BasicCommand extends DefaultBotCommand {
    * свой конструктор с получением и заданием необходимых зависимостей, но предварительно вызвав
    * Данный родительский конструктор.
    */
-  public BasicCommand(String commandIdentifier, String description) {
+  public AbstractCommand(String commandIdentifier, String description) {
     super(commandIdentifier, description);
   }
 

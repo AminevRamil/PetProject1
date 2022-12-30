@@ -1,6 +1,6 @@
 package com.starbun.petproject1;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.processor.UpdateProcessor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class StarBunBot extends TelegramLongPollingBot {
   @Value("${telegram.bot.name}")
   private String botUsername;
 
-  private final List<BasicCommand> commandList;
+  private final List<AbstractCommand> commandList;
 
   private final UpdateProcessor updateProcessor;
 

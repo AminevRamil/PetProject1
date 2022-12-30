@@ -9,17 +9,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.util.Arrays;
 
-import static com.starbun.petproject1.command.start.StartKeyboardActions.RESTART;
-import static com.starbun.petproject1.command.start.StartKeyboardActions.SHOW_MENU;
+import static com.starbun.petproject1.command.start.StartActions.RESTART;
+import static com.starbun.petproject1.command.start.StartActions.SHOW_MENU;
 
 @Component
 @AllArgsConstructor
 public class StartKeyboardService extends InlineKeyboardService {
   @Override
   public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
-    StartCommandStates startState = (StartCommandStates) state;
+    StartState startState = (StartState) state;
     switch (startState) {
-      case START_OPTIONS -> {
+      case START_BEGIN -> {
         return startKeyboard(userId);
       }
       default -> throw new NoImplementationException("Для данного состояния не существует инлайн клавиатуры: " + state);

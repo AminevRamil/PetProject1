@@ -1,6 +1,6 @@
 package com.starbun.petproject1.util;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.service.CommandFactoryService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class CommandsLifeCycleManager {
    */
   private static final String DEFAULT_COMMAND = CommandNames.COMMAND_START;
 
-  private final Map<Long, BasicCommand> userToCommandMap = new HashMap<>();
+  private final Map<Long, AbstractCommand> userToCommandMap = new HashMap<>();
 
   private final CommandFactoryService commandFactory;
 
@@ -42,7 +42,7 @@ public class CommandsLifeCycleManager {
   @Scheduled(cron = "0 * * * * *")
   public void cleanupOldCommands() {
     LocalDateTime now = LocalDateTime.now();
-    List<Map.Entry<Long, BasicCommand>> commandsToDelete = userToCommandMap.entrySet().stream()
+    List<Map.Entry<Long, AbstractCommand>> commandsToDelete = userToCommandMap.entrySet().stream()
         .filter(entry -> entry.getValue().getExpiryDate().isBefore(now))
         .toList();
     if (!CollectionUtils.isEmpty(commandsToDelete)) {
@@ -61,12 +61,12 @@ public class CommandsLifeCycleManager {
    * @param commandName команда, которую задал пользователь. Если null, то пользователь не хочет менять команду
    * @return команду с которой работает пользователь
    */
-  public BasicCommand getCommandByUserId(Long userId, String commandName) {
-    BasicCommand command = userToCommandMap.containsKey(userId) ? getUserCommandAndUpdateExpiryDate(userId) : getDefaultCommand(userId);
+  public AbstractCommand getCommandByUserId(Long userId, String commandName) {
+    AbstractCommand command = userToCommandMap.containsKey(userId) ? getUserCommandAndUpdateExpiryDate(userId) : getDefaultCommand(userId);
     return command.getCommandIdentifier().equals(commandName) || commandName == null ? command : tryToCloseOldCommandAndGetNew(command, commandName, userId);
   }
 
-  public BasicCommand getCommandByUserId(Long userId) {
+  public AbstractCommand getCommandByUserId(Long userId) {
     return getCommandByUserId(userId, null);
   }
 
@@ -74,15 +74,15 @@ public class CommandsLifeCycleManager {
    * Попытка закрытия старой команды и создания новой команды.
    * @implNote Недоделана. В любом случае создаёт новую команду
    */
-  private BasicCommand tryToCloseOldCommandAndGetNew(BasicCommand command, String commandName, Long userId) {
-    if (command.getCurrentState().getCode().equals(Integer.MAX_VALUE)) {
-      BasicCommand newCommand = commandFactory.createCommand(commandName);
+  private AbstractCommand tryToCloseOldCommandAndGetNew(AbstractCommand command, String commandName, Long userId) {
+    if (command.getStateMachine().getCurrentState().getCode().equals(0)) {
+      AbstractCommand newCommand = commandFactory.createCommand(commandName);
       storeNewCommand(newCommand, userId);
       return newCommand;
     } else {
       // TODO Переделать под попытку завершения старой команды
       // TODO Например, выплюнуть ошибку, что не завершена работа с предыдущей командой.
-      BasicCommand newCommand = commandFactory.createCommand(commandName);
+      AbstractCommand newCommand = commandFactory.createCommand(commandName);
       storeNewCommand(newCommand, userId);
       return newCommand;
     }
@@ -91,17 +91,17 @@ public class CommandsLifeCycleManager {
   /**
    * Достаёт команду, с которой работает пользователь и обновляет её "срок годности"
    */
-  private BasicCommand getUserCommandAndUpdateExpiryDate(Long userId) {
-    BasicCommand basicCommand = userToCommandMap.get(userId);
-    basicCommand.setExpiryDate(LocalDateTime.now().plusMinutes(TIME_TO_LIVE));
-    return basicCommand;
+  private AbstractCommand getUserCommandAndUpdateExpiryDate(Long userId) {
+    AbstractCommand abstractCommand = userToCommandMap.get(userId);
+    abstractCommand.setExpiryDate(LocalDateTime.now().plusMinutes(TIME_TO_LIVE));
+    return abstractCommand;
   }
 
   /**
    * Создание стартовой команды для пользователя
    */
-  private BasicCommand getDefaultCommand(Long userId) {
-    BasicCommand command = commandFactory.createCommand(DEFAULT_COMMAND);
+  private AbstractCommand getDefaultCommand(Long userId) {
+    AbstractCommand command = commandFactory.createCommand(DEFAULT_COMMAND);
     storeNewCommand(command, userId);
     return command;
   }
@@ -109,8 +109,8 @@ public class CommandsLifeCycleManager {
   /**
    * Сохраняет новую текущую команду для пользователя и прописывает идентификатор пользователя в команду
    */
-  public void storeNewCommand(BasicCommand command, Long userId) {
-    command.setUserOwnerId(userId);
+  public void storeNewCommand(AbstractCommand command, Long userId) {
+    command.getStateMachine().setUserOwnerId(userId);
     userToCommandMap.put(userId, command);
   }
 }
