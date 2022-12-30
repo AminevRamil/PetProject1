@@ -1,6 +1,7 @@
 package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.CommandStates;
+import com.starbun.petproject1.command.debt.state.DebtActions;
 import com.starbun.petproject1.command.debt.state.DebtState;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.service.InlineKeyboardService;
@@ -16,12 +17,11 @@ import static com.starbun.petproject1.command.debt.state.DebtActions.*;
  * Фабрика? Абстрактная фабрика? Фабричный метод?
  */
 @Component
-public class DebtKeyboardService extends InlineKeyboardService {
+public class DebtKeyboardService extends InlineKeyboardService<DebtState, DebtActions> {
 
   @Override
-  public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
-    DebtState debtState = (DebtState) state;
-    switch (debtState) {
+  public InlineKeyboardMarkup createForState(DebtState state, Long userId) {
+    switch (state) {
       case DEBT_BEGIN, DEBT_CHOSE -> {
         return debtCreateKeyboard(userId);
       }
