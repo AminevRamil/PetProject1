@@ -1,6 +1,5 @@
 package com.starbun.petproject1.command.start;
 
-import com.starbun.petproject1.command.CommandStates;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.service.InlineKeyboardService;
 import lombok.AllArgsConstructor;
@@ -14,11 +13,10 @@ import static com.starbun.petproject1.command.start.StartActions.SHOW_MENU;
 
 @Component
 @AllArgsConstructor
-public class StartKeyboardService extends InlineKeyboardService {
+public class StartKeyboardService extends InlineKeyboardService<StartState, StartActions> {
   @Override
-  public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
-    StartState startState = (StartState) state;
-    switch (startState) {
+  public InlineKeyboardMarkup createForState(StartState state, Long userId) {
+    switch (state) {
       case START_BEGIN -> {
         return startKeyboard(userId);
       }
