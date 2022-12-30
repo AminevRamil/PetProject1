@@ -1,6 +1,6 @@
 package com.starbun.petproject1.processor.impl;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.processor.CallbackQueryProcessor;
 import com.starbun.petproject1.dto.InlineButtonInfo;
@@ -34,7 +34,7 @@ public class CallbackQueryProcessorImpl implements CallbackQueryProcessor {
     Long userIdOfButtonOwner = buttonInfo.getUserId();
 
     if (userIdOfButtonPresser.equals(userIdOfButtonOwner)) {
-      BasicCommand command = commandsLifeCycleController.getCommandByUserId(userIdOfButtonPresser);
+      AbstractCommand command = commandsLifeCycleController.getCommandByUserId(userIdOfButtonPresser);
       command.executeInlineButton(absSender, query);
     } else {
       /**

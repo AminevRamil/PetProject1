@@ -1,45 +1,42 @@
 package com.starbun.petproject1.command.start;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractStateProcessor;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.command.CommandNames;
-import com.starbun.petproject1.command.CommandStates;
+import com.starbun.petproject1.command.start.state.StartStateMachine;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
 import com.starbun.petproject1.service.TelegramUserService;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
-import static com.starbun.petproject1.command.start.StartCommandStates.START_OPTIONS;
+import java.util.List;
 
 @Slf4j
 @Component(CommandNames.COMMAND_START)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class StartCommand extends BasicCommand {
+public class StartCommand extends AbstractCommand {
 
   @Getter
-  @Setter
-  // Операционные данные (состояние команды)
-  private StartCommandStates currentState = START_OPTIONS;
+  private final StartStateMachine stateMachine;
 
   // Бины/сервисы
   private final TelegramUserService telegramUserService;
   private final StartKeyboardService startKeyboardService;
 
-  public StartCommand(TelegramUserService telegramUserService, StartKeyboardService startKeyboardService) {
+  public StartCommand(TelegramUserService telegramUserService, StartKeyboardService startKeyboardService, List<AbstractStateProcessor<StartState, StartActions>> processors) {
     super(CommandNames.COMMAND_START, "Стартовая команда бота");
     this.telegramUserService = telegramUserService;
     this.startKeyboardService = startKeyboardService;
+    this.stateMachine = new StartStateMachine(processors);
   }
 
   /**
@@ -49,9 +46,9 @@ public class StartCommand extends BasicCommand {
   public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
     switch (chat.getType()) {
       case "private" -> {
-        TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
-        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser, userOwnerId);
-        lastMessageFromBot = send(absSender, greetingsMessage);
+//        TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
+//        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser, userOwnerId);
+//        lastMessageFromBot = send(absSender, greetingsMessage);
       }
       case "group", "channel", "supergroup" -> {
         throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + chat.getType());
@@ -70,7 +67,7 @@ public class StartCommand extends BasicCommand {
         .chatId(chat.getId())
         .text("Стартуем, " + telegramUser.getActualUsername() + "!")
         .parseMode("Markdown")
-        .replyMarkup(startKeyboardService.createForState(currentState, userId))
+//        .replyMarkup(startKeyboardService.createForState(currentState, userId))
         .build();
   }
 }

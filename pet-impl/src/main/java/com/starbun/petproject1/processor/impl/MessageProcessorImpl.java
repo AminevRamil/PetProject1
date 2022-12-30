@@ -1,6 +1,6 @@
 package com.starbun.petproject1.processor.impl;
 
-import com.starbun.petproject1.command.BasicCommand;
+import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.processor.MessageProcessor;
 import com.starbun.petproject1.service.TelegramUserService;
@@ -33,7 +33,7 @@ public class MessageProcessorImpl implements MessageProcessor {
     TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
     if (message.isCommand()) {
       String commandName = getCommand(message);
-      BasicCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), commandName);
+      AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), commandName);
       // TODO 1 Если пришедший код команды не совпадает с тем, что в хранилище, то пересоздать команду.
       // TODO 2 как вариант сделать метод для закрытия команды и она проверяет, можно ли себя закрыть на данном этапе или нет
       // TODO 2.1 Проверять можно по текущему состоянию (MAX_INT)
@@ -45,7 +45,7 @@ public class MessageProcessorImpl implements MessageProcessor {
 
   private void processNonCommandMessage(AbsSender absSender, Message message) {
     TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
-    BasicCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), null);
+    AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), null);
     commandByUserId.processMessage(absSender, message, null);
   }
 

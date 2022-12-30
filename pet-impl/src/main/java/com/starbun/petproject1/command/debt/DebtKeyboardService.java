@@ -1,6 +1,7 @@
 package com.starbun.petproject1.command.debt;
 
 import com.starbun.petproject1.command.CommandStates;
+import com.starbun.petproject1.command.debt.state.DebtState;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.service.InlineKeyboardService;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.starbun.petproject1.command.debt.DebtKeyboardActions.*;
+import static com.starbun.petproject1.command.debt.state.DebtActions.*;
 
 /**
  * Фабрика? Абстрактная фабрика? Фабричный метод?
@@ -19,7 +20,7 @@ public class DebtKeyboardService extends InlineKeyboardService {
 
   @Override
   public InlineKeyboardMarkup createForState(CommandStates state, Long userId) {
-    DebtCommandStates debtState = (DebtCommandStates) state;
+    DebtState debtState = (DebtState) state;
     switch (debtState) {
       case DEBT_BEGIN, DEBT_CHOSE -> {
         return debtCreateKeyboard(userId);
