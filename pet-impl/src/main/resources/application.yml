@@ -3,9 +3,10 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/petproject?currentSchema=public"
-    username: postgres
-    password: password
+    url: "URL для подключения к БД. Пример ниже:"
+    #"jdbc:postgresql://localhost:5432/petproject?currentSchema=public"
+    username: [Пользователь БД]
+    password: [Пароль пользователя БД]
   liquibase:
     enabled: true
     change-log: classpath:db.changelog-master.yaml
