@@ -30,7 +30,7 @@ public class MessageProcessorImpl implements MessageProcessor {
   @Override
   public void process(AbsSender absSender, Message message) {
     log.info("Пришло сообщение от пользователя {}", message.getFrom().getId());
-    TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
+    TelegramUserDto telegramUser = telegramUserService.registerOrFetchUser(message.getFrom());
     if (message.isCommand()) {
       String commandName = getCommand(message);
       AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), commandName);
@@ -44,7 +44,7 @@ public class MessageProcessorImpl implements MessageProcessor {
   }
 
   private void processNonCommandMessage(AbsSender absSender, Message message) {
-    TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(message.getFrom());
+    TelegramUserDto telegramUser = telegramUserService.registerOrFetchUser(message.getFrom());
     AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), null);
     commandByUserId.processMessage(absSender, message, null);
   }

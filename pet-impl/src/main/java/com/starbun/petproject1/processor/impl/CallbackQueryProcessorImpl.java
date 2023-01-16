@@ -29,7 +29,7 @@ public class CallbackQueryProcessorImpl implements CallbackQueryProcessor {
   public void process(AbsSender absSender, CallbackQuery query) {
     InlineButtonInfo buttonInfo = new InlineButtonInfo(query.getData());
 
-    TelegramUserDto telegramUserDto = telegramUserService.registerOfFetchUser(query.getFrom());
+    TelegramUserDto telegramUserDto = telegramUserService.registerOrFetchUser(query.getFrom());
     Long userIdOfButtonPresser = telegramUserDto.getId();
     Long userIdOfButtonOwner = buttonInfo.getUserId();
 
