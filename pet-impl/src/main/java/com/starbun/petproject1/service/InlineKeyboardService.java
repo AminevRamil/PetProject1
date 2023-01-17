@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-public abstract class InlineKeyboardService<S extends CommandStates<A>, A extends CommandActions> {
+public interface InlineKeyboardService<S extends CommandStates<A>, A extends CommandActions> {
 
   /**
    * Создание клавиатуры для указанного состояния
@@ -16,7 +16,16 @@ public abstract class InlineKeyboardService<S extends CommandStates<A>, A extend
    * @param userId идентификатор пользователя телеграм, с которым будет связана создаваемая клавиатура
    * @return настроенную клавиатуру для вставки в сообщение
    */
-  abstract public InlineKeyboardMarkup createForState(S state, Long userId);
+  InlineKeyboardMarkup createForState(S state, Long userId);
+
+  /**
+   * Создание клавиатуры для указанного действия
+   *
+   * @param action  действие для которого нужна клавиатура
+   * @param userId идентификатор пользователя телеграм, с которым будет связана создаваемая клавиатура
+   * @return настроенную клавиатуру для вставки в сообщение
+   */
+  InlineKeyboardMarkup createForAction(A action, Long userId);
 
   /**
    * Метод для создания инлайн кнопки
@@ -27,7 +36,7 @@ public abstract class InlineKeyboardService<S extends CommandStates<A>, A extend
    * @return кнопку, готовую для вставки в InlineKeyboardMarkup
    */
   @SneakyThrows
-  protected InlineKeyboardButton createButton(String text, A action, Long userId) {
+  default InlineKeyboardButton createButton(String text, A action, Long userId) {
     InlineButtonInfo buttonInfo = InlineButtonInfo.builder()
         .userId(userId)
         .keyboardActionCode(action.getCode())

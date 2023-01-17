@@ -74,7 +74,7 @@ public class DebtCommand extends AbstractCommand {
     try {
       stateMachine.performAction(action);
     } catch (Exception e) {
-
+      log.error("Ошибка обработки действия инлайн кнопки: ", e);
     }
   }
 

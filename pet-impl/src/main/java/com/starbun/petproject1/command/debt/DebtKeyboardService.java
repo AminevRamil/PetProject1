@@ -17,7 +17,7 @@ import static com.starbun.petproject1.command.debt.state.DebtActions.*;
  * Фабрика? Абстрактная фабрика? Фабричный метод?
  */
 @Component
-public class DebtKeyboardService extends InlineKeyboardService<DebtState, DebtActions> {
+public class DebtKeyboardService implements InlineKeyboardService<DebtState, DebtActions> {
 
   @Override
   public InlineKeyboardMarkup createForState(DebtState state, Long userId) {
@@ -30,6 +30,11 @@ public class DebtKeyboardService extends InlineKeyboardService<DebtState, DebtAc
       }
       default -> throw new NoImplementationException("Для данного состояния не существует инлайн клавиатуры: " + state);
     }
+  }
+
+  @Override
+  public InlineKeyboardMarkup createForAction(DebtActions action, Long userId) {
+    return null;
   }
 
   /**

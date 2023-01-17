@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum StartActions implements CommandActions {
   RESTART(0, "RESTART"),
-  SHOW_MENU(1, "SHOW_MENU");
+  SHOW_COMMANDS(1, "SHOW_COMMANDS");
 
   @Getter
   private final Integer code;

@@ -1,15 +1,11 @@
 package com.starbun.petproject1.command;
 
-import com.starbun.petproject1.command.debt.state.DebtActions;
-import com.starbun.petproject1.command.debt.state.DebtState;
+import com.starbun.petproject1.dto.ProcessorRequest;
+import com.starbun.petproject1.dto.ProcessorResponse;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Абстрактная реализация <b>CommandStateMachine</b> с вынесением общих полей и утильных методов.
@@ -45,7 +41,7 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
   protected S currentState;
 
   @Override
-  public void performAction(A action) {
+  public ProcessorResponse performAction(A action) {
     if (!stateProcessors.containsKey(currentState)) {
       throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
     }
@@ -53,6 +49,10 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
       throw new UnsupportedOperationException(String.format(
           "Заданное действие %s не поддерживается в текущем состоянии %s", action.getCode(), currentState.getName()));
     }
-    stateProcessors.get(currentState).process(action);
+    ProcessorRequest<A> processorRequest = new ProcessorRequest<>();
+    processorRequest.setAction(action);
+    ProcessorResponse response = stateProcessors.get(currentState).process(processorRequest);
+    currentState = (S) response.getNewState();
+    return response;
   }
 }

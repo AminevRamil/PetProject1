@@ -13,8 +13,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public enum StartState implements CommandStates<StartActions> {
-  START_BEGIN(0, "START_BEGIN", StartActions.RESTART, StartActions.SHOW_MENU),
-  START_END(Integer.MAX_VALUE, "START_END", StartActions.RESTART, StartActions.SHOW_MENU);
+  START_BEGIN(0, "START_BEGIN", StartActions.RESTART, StartActions.SHOW_COMMANDS),
+  START_END(Integer.MAX_VALUE, "START_END", StartActions.RESTART, StartActions.SHOW_COMMANDS);
   private final Integer code;
   private final String name;
   private final List<StartActions> applicableActions;

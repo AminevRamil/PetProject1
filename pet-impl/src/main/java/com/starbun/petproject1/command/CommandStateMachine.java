@@ -1,5 +1,7 @@
 package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.ProcessorResponse;
+
 /**
  * Интерфейс машины состояний. Каждая машина состояний должна быть способна
  * выполнять действия, тем самым переключая внутреннее состояние.
@@ -14,5 +16,5 @@ public interface CommandStateMachine<S extends CommandStates<A>, A extends Comma
    * Попытка выполнить заданное действие в условиях текущего состояния
    * @param action заданное действие
    */
-  void performAction(A action);
+  ProcessorResponse performAction(A action);
 }
