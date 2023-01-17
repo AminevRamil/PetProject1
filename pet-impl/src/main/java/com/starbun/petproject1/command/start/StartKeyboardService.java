@@ -9,11 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.Arrays;
 
 import static com.starbun.petproject1.command.start.StartActions.RESTART;
-import static com.starbun.petproject1.command.start.StartActions.SHOW_MENU;
+import static com.starbun.petproject1.command.start.StartActions.SHOW_COMMANDS;
 
 @Component
 @AllArgsConstructor
-public class StartKeyboardService extends InlineKeyboardService<StartState, StartActions> {
+public class StartKeyboardService implements InlineKeyboardService<StartState, StartActions> {
   @Override
   public InlineKeyboardMarkup createForState(StartState state, Long userId) {
     switch (state) {
@@ -24,13 +24,23 @@ public class StartKeyboardService extends InlineKeyboardService<StartState, Star
     }
   }
 
+  @Override
+  public InlineKeyboardMarkup createForAction(StartActions action, Long userId) {
+    switch (action) {
+      case SHOW_COMMANDS -> {
+        return startKeyboard(userId);
+      }
+      default -> throw new NoImplementationException("Для данного действия не существует инлайн клавиатуры: " + action);
+    }
+  }
+
   /**
    * Создание стартовой клавиатуры.
    */
   private InlineKeyboardMarkup startKeyboard(Long userId) {
     return InlineKeyboardMarkup.builder()
         .keyboardRow(Arrays.asList(
-            createButton("Показать меню", SHOW_MENU, userId)))
+            createButton("Показать список команд", SHOW_COMMANDS, userId)))
         .keyboardRow(Arrays.asList(
             createButton("Ре-стартуем!", RESTART, userId)))
         .build();

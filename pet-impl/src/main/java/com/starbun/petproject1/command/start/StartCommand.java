@@ -1,10 +1,11 @@
 package com.starbun.petproject1.command.start;
 
-import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.AbstractCommand;
+import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.command.start.state.StartStateMachine;
-import com.starbun.petproject1.dto.TelegramUserDto;
+import com.starbun.petproject1.dto.InlineButtonInfo;
+import com.starbun.petproject1.dto.ProcessorResponse;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
 import com.starbun.petproject1.service.TelegramUserService;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -42,13 +45,12 @@ public class StartCommand extends AbstractCommand {
   /**
    * Метод срабатывает только при наличии "/start" в начале текстового сообщения
    */
+  // TODO Добавить дефолтную реализацию в абстрактный класс
   @Override
   public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
     switch (chat.getType()) {
       case "private" -> {
-//        TelegramUserDto telegramUser = telegramUserService.registerOfFetchUser(user);
-//        SendMessage greetingsMessage = createGreetingsMessage(chat, telegramUser, userOwnerId);
-//        lastMessageFromBot = send(absSender, greetingsMessage);
+        send(absSender, createGreetingsMessage(chat));
       }
       case "group", "channel", "supergroup" -> {
         throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + chat.getType());
@@ -59,15 +61,28 @@ public class StartCommand extends AbstractCommand {
     }
   }
 
+  @Override
+  public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
+
+    var info = new InlineButtonInfo(callbackQuery.getData());
+    var action = StartActions.fromCode(info.getKeyboardActionCode());
+
+    try {
+      ProcessorResponse processorResponse = stateMachine.performAction(action);
+      lastMessageFromBot = (Message) send(absSender, processorResponse.getMethod());
+    } catch (Exception e) {
+      log.error("Ошибка обработки действия инлайн кнопки: ", e);
+    }
+  }
+
   /**
    * Создание начального приветственного сообщения
    */
-  private SendMessage createGreetingsMessage(Chat chat, TelegramUserDto telegramUser, Long userId) {
+  private SendMessage createGreetingsMessage(Chat chat) {
     return SendMessage.builder()
         .chatId(chat.getId())
-        .text("Стартуем, " + telegramUser.getActualUsername() + "!")
-        .parseMode("Markdown")
-//        .replyMarkup(startKeyboardService.createForState(currentState, userId))
+        .text("{Приветственный текст}")
+        .replyMarkup(startKeyboardService.createForState(stateMachine.getCurrentState(), stateMachine.getUserOwnerId()))
         .build();
   }
 }

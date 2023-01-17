@@ -4,6 +4,8 @@ package com.starbun.petproject1.command.debt.processor;
 import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.debt.state.DebtState;
 import com.starbun.petproject1.command.debt.state.DebtActions;
+import com.starbun.petproject1.dto.ProcessorRequest;
+import com.starbun.petproject1.dto.ProcessorResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,8 +17,9 @@ public class DebtInputProcessor extends AbstractStateProcessor<DebtState, DebtAc
   private final DebtState processingState = DebtState.DEBT_INPUT;
 
   @Override
-  public void process(DebtActions action) {
-    log.info("DebtInputProcessor action: " + action.getName());
+  public ProcessorResponse process(ProcessorRequest<DebtActions> request) {
+    log.info("DebtInputProcessor action: " + request.getAction().getName());
+    return null;
 
   }
 }

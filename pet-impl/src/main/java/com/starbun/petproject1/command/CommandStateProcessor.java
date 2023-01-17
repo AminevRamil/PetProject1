@@ -1,5 +1,8 @@
 package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.ProcessorRequest;
+import com.starbun.petproject1.dto.ProcessorResponse;
+
 /**
  * Интерфейс обработчика состояний. Каждый обработчик должен быть
  * способен обработать поступающее действие. Иначе выбросить ошибку
@@ -15,7 +18,9 @@ public interface CommandStateProcessor<S extends CommandStates<A>, A extends Com
 
   /**
    * Попытка обработать текущее состояние реализуя заданное действие
-   * @param action действие к исполнению
+   *
+   * @param request действие к исполнению
+   * @return результат отработки действия для последующего применения
    */
-  void process(A action);
+  ProcessorResponse process(ProcessorRequest<A> request);
 }

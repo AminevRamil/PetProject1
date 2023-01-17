@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
+import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -31,9 +32,10 @@ public abstract class AbstractCommand extends DefaultBotCommand {
   protected LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TIME_TO_LIVE);
 
   /**
-   * Объект с информацией о последнем сообщении бота
+   * Объект(ы) с информацией о последнем сообщении бота
    */
   protected Message lastMessageFromBot;
+  protected BotApiObject lastBotApiObject;
 
   /**
    * Машина состояний для обработки действий пользователя
@@ -42,7 +44,7 @@ public abstract class AbstractCommand extends DefaultBotCommand {
   @Getter
   protected AbstractStateMachine<? extends CommandStates<? extends CommandActions>, ? extends CommandActions> stateMachine;
 
-  public void executeInlineButton(AbsSender absSender, CallbackQuery message){
+  public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery){
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
   }
 
@@ -70,7 +72,7 @@ public abstract class AbstractCommand extends DefaultBotCommand {
         .parseMode(MARKDOWN)
         .text("Данная команда не поддерживает работу с текстом. Используйте кнопки")
         .build();
-    send(absSender, sendMessage);
+    lastMessageFromBot = send(absSender, sendMessage);
   }
 
   /**
@@ -79,7 +81,8 @@ public abstract class AbstractCommand extends DefaultBotCommand {
    */
   protected <T extends Serializable, Method extends BotApiMethod<T>> T send(AbsSender absSender, Method method)  {
     try {
-      return absSender.execute(method);
+      // TODO Проверить каст?
+      return (T) absSender.execute(method);
     } catch (TelegramApiException e) {
       log.error("В ходе отправки сообщения произошла ошибка: ", e);
       throw new RuntimeException("В ходе отправки сообщения произошла ошибка", e);
