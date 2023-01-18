@@ -2,9 +2,11 @@ package com.starbun.petproject1.processor.impl;
 
 import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
+import com.starbun.petproject1.model.UpdateType;
 import com.starbun.petproject1.processor.MessageProcessor;
 import com.starbun.petproject1.service.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,9 @@ import static org.telegram.telegrambots.meta.api.objects.EntityType.BOTCOMMAND;
 @Component
 @RequiredArgsConstructor
 public class MessageProcessorImpl implements MessageProcessor {
+
+  @Getter
+  private final UpdateType processingType = UpdateType.MESSAGE;
 
   private final TelegramUserService telegramUserService;
 

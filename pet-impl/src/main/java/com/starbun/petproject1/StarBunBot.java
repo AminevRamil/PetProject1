@@ -1,7 +1,7 @@
 package com.starbun.petproject1;
 
 import com.starbun.petproject1.command.AbstractCommand;
-import com.starbun.petproject1.processor.UpdateProcessor;
+import com.starbun.petproject1.processor.UpdateResolver;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class StarBunBot extends TelegramLongPollingBot {
 
   private final List<AbstractCommand> commandList;
 
-  private final UpdateProcessor updateProcessor;
+  private final UpdateResolver updateResolver;
 
   @PostConstruct
   public void init() {
@@ -41,7 +41,7 @@ public class StarBunBot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(Update update) {
-    updateProcessor.process(this, update);
+    updateResolver.process(this, update);
   }
 
   /**

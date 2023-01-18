@@ -4,9 +4,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 /**
- * Обработчик обновлений поступивших боту
+ * Обработчик обновлений поступивших боту.
+ * Распределяет обновления по конкретным обработчикам.
  */
-public interface UpdateProcessor {
+public interface UpdateResolver {
 
   void process(AbsSender absSender, Update update);
 }

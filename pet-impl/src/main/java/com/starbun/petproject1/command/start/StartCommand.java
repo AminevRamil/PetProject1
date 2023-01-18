@@ -69,7 +69,7 @@ public class StartCommand extends AbstractCommand {
 
     try {
       ProcessorResponse processorResponse = stateMachine.performAction(action);
-      lastMessageFromBot = (Message) send(absSender, processorResponse.getMethod());
+      lastBotApiObject =  send(absSender, processorResponse.getMethod());
     } catch (Exception e) {
       log.error("Ошибка обработки действия инлайн кнопки: ", e);
     }
