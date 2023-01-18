@@ -78,11 +78,20 @@ public abstract class AbstractCommand extends DefaultBotCommand {
   /**
    * Простая обёртка над процессом выполнения отправки ответов телеграм-ботом, чтобы
    * не приходилось постоянно засовывать отправку в try-catch блоки с типичной логикой обработки.
+   *
+   * @param absSender бот, исполняющий запросы к телеграму
+   * @param method действие, которое необходимо совершить боту
+   * @return результат в виде описания сообщения, которое создал бот.
+   * @param <B> Объект показывающий результат отправки запроса к телеграму
+   *            @TODO может вернуть и другие объекты, проверить исходники
+   * @param <T> сериализуемый объект
+   * @param <Method> запрос к телеграму
    */
-  protected <T extends Serializable, Method extends BotApiMethod<T>> T send(AbsSender absSender, Method method)  {
+  protected <B extends BotApiObject, T extends Serializable, Method extends BotApiMethod<T>> B send(AbsSender absSender, Method method)  {
     try {
       // TODO Проверить каст?
-      return (T) absSender.execute(method);
+      // TODO Проверить, может ли тут быть что-то, помимо Message
+      return (B) absSender.execute(method);
     } catch (TelegramApiException e) {
       log.error("В ходе отправки сообщения произошла ошибка: ", e);
       throw new RuntimeException("В ходе отправки сообщения произошла ошибка", e);
