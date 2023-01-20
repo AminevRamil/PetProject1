@@ -8,7 +8,7 @@ import com.starbun.petproject1.command.debt.state.DebtState;
 import com.starbun.petproject1.command.debt.state.DebtStateMachine;
 import com.starbun.petproject1.dto.DebtDraft;
 import com.starbun.petproject1.dto.InlineButtonInfo;
-import com.starbun.petproject1.service.TelegramUserService;
+import com.starbun.petproject1.service.impl.TelegramUserService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;

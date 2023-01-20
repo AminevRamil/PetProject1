@@ -4,7 +4,7 @@ import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.model.UpdateType;
 import com.starbun.petproject1.processor.MessageProcessor;
-import com.starbun.petproject1.service.TelegramUserService;
+import com.starbun.petproject1.service.impl.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class MessageProcessorImpl implements MessageProcessor {
   private void processNonCommandMessage(AbsSender absSender, Message message) {
     TelegramUserDto telegramUser = telegramUserService.registerOrFetchUser(message.getFrom());
     AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), null);
-    commandByUserId.processMessage(absSender, message, null);
+    commandByUserId.processMessageWithResponse(absSender, message, null);
   }
 
   /**

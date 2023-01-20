@@ -1,4 +1,4 @@
-package com.starbun.petproject1.service;
+package com.starbun.petproject1.service.impl;
 
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.entity.TelegramUser;

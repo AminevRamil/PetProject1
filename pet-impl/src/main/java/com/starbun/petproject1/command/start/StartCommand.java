@@ -5,10 +5,9 @@ import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.command.start.state.StartStateMachine;
 import com.starbun.petproject1.dto.InlineButtonInfo;
-import com.starbun.petproject1.dto.ProcessorResponse;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
-import com.starbun.petproject1.service.TelegramUserService;
+import com.starbun.petproject1.service.impl.TelegramUserService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -68,8 +66,8 @@ public class StartCommand extends AbstractCommand {
     var action = StartActions.fromCode(info.getKeyboardActionCode());
 
     try {
-      ProcessorResponse processorResponse = stateMachine.performAction(action);
-      lastBotApiObject =  send(absSender, processorResponse.getMethod());
+      stateMachine.performAction(action);
+      //lastBotApiObject =  send(absSender, processorResponse.getMethod());
     } catch (Exception e) {
       log.error("Ошибка обработки действия инлайн кнопки: ", e);
     }

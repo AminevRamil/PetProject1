@@ -1,5 +1,6 @@
 package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.CommandResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -58,24 +59,35 @@ public abstract class AbstractCommand extends DefaultBotCommand {
     super(commandIdentifier, description);
   }
 
+
   /**
-   * Обработка обычных текстовых сообщений при работе с данной командой
+   * Не рекомендуется использовать т.к. не имеет возвращаемого во вне результата
+   * @see this.processMessageWithResponse(...)
    */
   @Override
+  @Deprecated
   public void processMessage(AbsSender absSender, Message message, String[] arguments) {
-    if (lastMessageFromBot == null) {
-      return;
-    }
+    super.processMessage(absSender, message, arguments);
+  }
+
+  /**
+   * Обработка обычных текстовых сообщений при работе с данной командой
+   *
+   * @return результат работы команды в виде описания того, что нужно сделать
+   */
+  public CommandResponse processMessageWithResponse(AbsSender absSender, Message message, String[] arguments) {
     SendMessage sendMessage = SendMessage.builder()
-        .replyToMessageId(lastMessageFromBot.getMessageId())
-        .chatId(lastMessageFromBot.getChatId())
+        .replyToMessageId(lastMessageFromBot != null ? lastMessageFromBot.getMessageId() : null)
+        .chatId(lastMessageFromBot != null? lastMessageFromBot.getChatId(): message.getChatId())
         .parseMode(MARKDOWN)
         .text("Данная команда не поддерживает работу с текстом. Используйте кнопки")
         .build();
     lastMessageFromBot = send(absSender, sendMessage);
+    return new CommandResponse();
   }
 
   /**
+   * TODO Вынести этот функционал в CommandResponseResolver
    * Простая обёртка над процессом выполнения отправки ответов телеграм-ботом, чтобы
    * не приходилось постоянно засовывать отправку в try-catch блоки с типичной логикой обработки.
    *
@@ -83,14 +95,14 @@ public abstract class AbstractCommand extends DefaultBotCommand {
    * @param method действие, которое необходимо совершить боту
    * @return результат в виде описания сообщения, которое создал бот.
    * @param <B> Объект показывающий результат отправки запроса к телеграму
-   *            @TODO может вернуть и другие объекты, проверить исходники
+   *            TODO может вернуть и другие объекты, проверить исходники
    * @param <T> сериализуемый объект
    * @param <Method> запрос к телеграму
    */
+  @Deprecated
   protected <B extends BotApiObject, T extends Serializable, Method extends BotApiMethod<T>> B send(AbsSender absSender, Method method)  {
     try {
-      // TODO Проверить каст?
-      // TODO Проверить, может ли тут быть что-то, помимо Message
+      // TODO Проверить каст
       return (B) absSender.execute(method);
     } catch (TelegramApiException e) {
       log.error("В ходе отправки сообщения произошла ошибка: ", e);

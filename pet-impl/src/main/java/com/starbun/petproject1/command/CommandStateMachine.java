@@ -1,6 +1,6 @@
 package com.starbun.petproject1.command;
 
-import com.starbun.petproject1.dto.ProcessorResponse;
+import com.starbun.petproject1.dto.ActionResponse;
 
 /**
  * Интерфейс машины состояний. Каждая машина состояний должна быть способна
@@ -14,7 +14,8 @@ public interface CommandStateMachine<S extends CommandStates<A>, A extends Comma
 
   /**
    * Попытка выполнить заданное действие в условиях текущего состояния
+   *
    * @param action заданное действие
    */
-  ProcessorResponse performAction(A action);
+  ActionResponse performAction(A action);
 }

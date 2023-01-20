@@ -1,5 +1,6 @@
 package com.starbun.petproject1.command;
 
+import com.starbun.petproject1.dto.ActionResponse;
 import com.starbun.petproject1.dto.ProcessorRequest;
 import com.starbun.petproject1.dto.ProcessorResponse;
 import lombok.Getter;
@@ -41,7 +42,7 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
   protected S currentState;
 
   @Override
-  public ProcessorResponse performAction(A action) {
+  public ActionResponse performAction(A action) {
     if (!stateProcessors.containsKey(currentState)) {
       throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
     }
@@ -53,6 +54,6 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
     processorRequest.setAction(action);
     ProcessorResponse response = stateProcessors.get(currentState).process(processorRequest);
     currentState = (S) response.getNewState();
-    return response;
+    return new ActionResponse();
   }
 }

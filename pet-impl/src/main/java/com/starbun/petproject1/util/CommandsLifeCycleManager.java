@@ -2,7 +2,7 @@ package com.starbun.petproject1.util;
 
 import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.command.CommandNames;
-import com.starbun.petproject1.service.CommandFactoryService;
+import com.starbun.petproject1.service.impl.CommandFactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
