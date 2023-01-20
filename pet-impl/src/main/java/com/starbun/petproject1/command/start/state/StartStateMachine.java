@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -22,6 +23,9 @@ public class StartStateMachine extends AbstractStateMachine<StartState, StartAct
     currentState = StartState.START_BEGIN;
     stateProcessors = processors.stream()
         .collect(Collectors.toMap(AbstractStateProcessor::getProcessingState, Function.identity()));
-    // TODO добавить проверку, что есть обработчик для каждого состояния
+
+    if (!Arrays.stream(StartState.values()).allMatch(stateProcessors::containsKey)) {
+      throw new RuntimeException();
+    }
   }
 }

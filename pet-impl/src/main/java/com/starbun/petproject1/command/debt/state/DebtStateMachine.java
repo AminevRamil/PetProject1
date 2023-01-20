@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,6 +24,9 @@ public class DebtStateMachine extends AbstractStateMachine<DebtState, DebtAction
     currentState = DebtState.DEBT_BEGIN;
     stateProcessors = processors.stream()
         .collect(Collectors.toMap(AbstractStateProcessor::getProcessingState, Function.identity()));
-    // TODO добавить проверку, что есть обработчик для каждого состояния
+
+    if (!Arrays.stream(DebtState.values()).allMatch(stateProcessors::containsKey)) {
+      throw new RuntimeException();
+    }
   }
 }
