@@ -3,7 +3,7 @@ package com.starbun.petproject1.processor.impl;
 import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.model.UpdateType;
-import com.starbun.petproject1.processor.MessageProcessor;
+import com.starbun.petproject1.processor.BotApiObjectProcessor;
 import com.starbun.petproject1.service.impl.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
 import lombok.Getter;
@@ -23,7 +23,7 @@ import static org.telegram.telegrambots.meta.api.objects.EntityType.BOTCOMMAND;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MessageProcessorImpl implements MessageProcessor {
+public class MessageProcessor implements BotApiObjectProcessor<Message> {
 
   @Getter
   private final UpdateType processingType = UpdateType.MESSAGE;

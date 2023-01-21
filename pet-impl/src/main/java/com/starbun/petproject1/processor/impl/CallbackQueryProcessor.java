@@ -3,8 +3,8 @@ package com.starbun.petproject1.processor.impl;
 import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.model.UpdateType;
-import com.starbun.petproject1.processor.CallbackQueryProcessor;
 import com.starbun.petproject1.dto.InlineButtonInfo;
+import com.starbun.petproject1.processor.BotApiObjectProcessor;
 import com.starbun.petproject1.service.impl.InlineCallbackService;
 import com.starbun.petproject1.service.impl.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 
 @Component
 @RequiredArgsConstructor
-public class CallbackQueryProcessorImpl implements CallbackQueryProcessor {
+public class CallbackQueryProcessor implements BotApiObjectProcessor<CallbackQuery> {
 
   @Getter
   private final UpdateType processingType = UpdateType.CALLBACK_QUERY;
