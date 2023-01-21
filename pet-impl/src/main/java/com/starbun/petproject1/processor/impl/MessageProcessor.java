@@ -18,7 +18,7 @@ import static org.telegram.telegrambots.extensions.bots.commandbot.commands.BotC
 import static org.telegram.telegrambots.meta.api.objects.EntityType.BOTCOMMAND;
 
 /**
- * Обрабатывает сообщения от пользователей.
+ * Процессор обрабатывающий текстовые сообщения
  */
 @Slf4j
 @Component
@@ -27,15 +27,14 @@ public class MessageProcessor implements BotApiObjectProcessor<Message> {
 
   @Getter
   private final UpdateType processingType = UpdateType.MESSAGE;
-
-  private final TelegramUserService telegramUserService;
-
   private final CommandsLifeCycleManager commandsLifeCycleManager;
+  private final TelegramUserService telegramUserService;
 
   @Override
   public void process(AbsSender absSender, Message message) {
     log.info("Пришло сообщение от пользователя {}", message.getFrom().getId());
     TelegramUserDto telegramUser = telegramUserService.registerOrFetchUser(message.getFrom());
+
     if (message.isCommand()) {
       String commandName = getCommand(message);
       AbstractCommand commandByUserId = commandsLifeCycleManager.getCommandByUserId(telegramUser.getId(), commandName);

@@ -10,21 +10,22 @@ import com.starbun.petproject1.service.impl.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
+/**
+ * Процессор обрабатывающий нажатия инлайн-кнопок
+ */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CallbackQueryProcessor implements BotApiObjectProcessor<CallbackQuery> {
 
   @Getter
   private final UpdateType processingType = UpdateType.CALLBACK_QUERY;
-
-  private final InlineCallbackService inlineCallbackService;
-
   private final CommandsLifeCycleManager commandsLifeCycleController;
-
   private final TelegramUserService telegramUserService;
 
   /**
@@ -32,9 +33,10 @@ public class CallbackQueryProcessor implements BotApiObjectProcessor<CallbackQue
    */
   @Override
   public void process(AbsSender absSender, CallbackQuery query) {
-    InlineButtonInfo buttonInfo = new InlineButtonInfo(query.getData());
-
+    log.info("Нажата кнопка пользователем {}", query.getFrom().getId());
     TelegramUserDto telegramUserDto = telegramUserService.registerOrFetchUser(query.getFrom());
+
+    InlineButtonInfo buttonInfo = new InlineButtonInfo(query.getData());
     Long userIdOfButtonPresser = telegramUserDto.getId();
     Long userIdOfButtonOwner = buttonInfo.getUserId();
 
