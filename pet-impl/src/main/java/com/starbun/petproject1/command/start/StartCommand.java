@@ -4,16 +4,18 @@ import com.starbun.petproject1.command.AbstractCommand;
 import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.CommandNames;
 import com.starbun.petproject1.command.start.state.StartStateMachine;
+import com.starbun.petproject1.dto.ActionResponse;
+import com.starbun.petproject1.dto.CommandResponse;
+import com.starbun.petproject1.dto.CommandResponseType;
 import com.starbun.petproject1.dto.InlineButtonInfo;
 import com.starbun.petproject1.exception.NoImplementationException;
 import com.starbun.petproject1.exception.TelegramApiMismatchException;
-import com.starbun.petproject1.service.impl.TelegramUserService;
+import com.starbun.petproject1.service.InlineKeyboardService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -29,26 +31,23 @@ public class StartCommand extends AbstractCommand {
   @Getter
   private final StartStateMachine stateMachine;
 
-  // Бины/сервисы
-  private final TelegramUserService telegramUserService;
-  private final StartKeyboardService startKeyboardService;
+  private final InlineKeyboardService<StartState, StartActions> startKeyboardService;
 
-  public StartCommand(TelegramUserService telegramUserService, StartKeyboardService startKeyboardService, List<AbstractStateProcessor<StartState, StartActions>> processors) {
+  public StartCommand(InlineKeyboardService<StartState, StartActions> startKeyboardService,
+                      List<AbstractStateProcessor<StartState, StartActions>> processors) {
     super(CommandNames.COMMAND_START, "Стартовая команда бота");
-    this.telegramUserService = telegramUserService;
     this.startKeyboardService = startKeyboardService;
     this.stateMachine = new StartStateMachine(processors);
   }
 
   /**
-   * Метод срабатывает только при наличии "/start" в начале текстового сообщения
+   * Обработка команды/сообщения начинающегося с /start
    */
-  // TODO Добавить дефолтную реализацию в абстрактный класс
   @Override
-  public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
+  public CommandResponse executeWithResponse(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
     switch (chat.getType()) {
       case "private" -> {
-        send(absSender, createGreetingsMessage(chat));
+        return createGreetingsMessage(chat);
       }
       case "group", "channel", "supergroup" -> {
         throw new NoImplementationException("Ещё нет обработки команды /start для чата типа " + chat.getType());
@@ -60,26 +59,28 @@ public class StartCommand extends AbstractCommand {
   }
 
   @Override
-  public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
+  public CommandResponse executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
 
     var info = new InlineButtonInfo(callbackQuery.getData());
     var action = StartActions.fromCode(info.getKeyboardActionCode());
 
     try {
-      stateMachine.performAction(action);
-      //lastBotApiObject =  send(absSender, processorResponse.getMethod());
+      ActionResponse actionResponse = stateMachine.performAction(action);
+
     } catch (Exception e) {
       log.error("Ошибка обработки действия инлайн кнопки: ", e);
     }
+    return null;
   }
 
   /**
    * Создание начального приветственного сообщения
    */
-  private SendMessage createGreetingsMessage(Chat chat) {
-    return SendMessage.builder()
+  private CommandResponse createGreetingsMessage(Chat chat) {
+    return CommandResponse.builder()
+        .commandResponseType(CommandResponseType.NEW_MESSAGE)
+        .messageText("{Приветственный текст}")
         .chatId(chat.getId())
-        .text("{Приветственный текст}")
         .replyMarkup(startKeyboardService.createForState(stateMachine.getCurrentState(), stateMachine.getUserOwnerId()))
         .build();
   }

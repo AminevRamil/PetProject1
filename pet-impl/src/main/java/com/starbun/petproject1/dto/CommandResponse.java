@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 /**
  * Объект с ответом команды. Ответ может иметь разные типы и хранить разную информацию.
@@ -16,14 +17,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommandResponse {
-  private ResponseType responseType;
+  private CommandResponseType commandResponseType;
+  private Integer replyToMessageId;
   private String messageText;
   private Long messageId;
-  private String ChatId;
+  private Long chatId;
   private Long userId;
+  private ReplyKeyboard replyMarkup;
 }
 
-enum ResponseType{
-  NEW_MESSAGE,
-  ALTER_MESSAGE
-}

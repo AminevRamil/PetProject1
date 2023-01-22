@@ -1,6 +1,8 @@
 package com.starbun.petproject1.command;
 
 import lombok.Getter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *  Абстрактная реализация обработчика состояний. Каждый обработчик должен работать с
@@ -11,6 +13,7 @@ import lombok.Getter;
  *            Состояния должны уметь работать с действиями <A>
  * @param <A> Набор действий, которые переключают состояния
  */
+@Component
 public abstract class AbstractStateProcessor<S extends CommandStates<A>, A extends CommandActions>
     implements CommandStateProcessor<S, A> {
 

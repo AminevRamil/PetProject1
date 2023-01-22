@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
-@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DebtStateMachine extends AbstractStateMachine<DebtState, DebtActions> {
 
   private DebtDraft currentEditingDebt = null;

@@ -1,23 +1,21 @@
 package com.starbun.petproject1.command;
 
 import com.starbun.petproject1.dto.CommandResponse;
+import com.starbun.petproject1.exception.NoImplementationException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.DefaultBotCommand;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.starbun.petproject1.util.CommandsLifeCycleManager.TIME_TO_LIVE;
-import static org.telegram.telegrambots.meta.api.methods.ParseMode.MARKDOWN;
 
 /**
  * Абстрактный класс для всех команд. Содержит в себе элементы общей логики и необходимые для работы команды поля.
@@ -38,14 +36,52 @@ public abstract class AbstractCommand extends DefaultBotCommand {
   protected Message lastMessageFromBot;
   protected BotApiObject lastBotApiObject;
 
+  public void setLastMessageFromBot() {
+    throw new NoImplementationException("setLastMessageFromBot");
+    //TODO Написать логику заполнения двух верхних полей через один сеттер
+  }
+
+  public void getLastMessageFromBot() {
+    throw new NoImplementationException("getLastMessageFromBot");
+  }
+
   /**
    * Машина состояний для обработки действий пользователя
+   *
    * @see AbstractStateMachine
    */
   @Getter
   protected AbstractStateMachine<? extends CommandStates<? extends CommandActions>, ? extends CommandActions> stateMachine;
 
-  public void executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery){
+  /**
+   * Обработка команды/сообщения начинающегося с "/getCommandIdentifier()"
+   *
+   * @see this.executeWithResponse(...)
+   */
+  @Override
+  @Deprecated
+  public void execute(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
+    throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция");
+  }
+
+  /**
+   * Обработка команды/сообщения начинающегося с "/getCommandIdentifier()"
+   *
+   * @param absSender бот отправляющий сообщения
+   * @param user      пользователь, отправивший команду
+   * @param chat      чат для отправки ответа
+   * @param messageId идентификатор сообщения для взаимодействия
+   * @param arguments передаваемые аргументы
+   * @return Результат работы команды с описанием необходимых действий
+   */
+  public CommandResponse executeWithResponse(AbsSender absSender, User user, Chat chat, Integer messageId, String[] arguments) {
+    throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция");
+  }
+
+  /**
+   * Метод обработки инлайн-кнопки команды
+   */
+  public CommandResponse executeInlineButton(AbsSender absSender, CallbackQuery callbackQuery) {
     throw new IllegalStateException("Для команды /" + getCommandIdentifier() + " не описана реакция на инлайн-кнопки");
   }
 
@@ -61,7 +97,9 @@ public abstract class AbstractCommand extends DefaultBotCommand {
 
 
   /**
+   * Обработка текстовых запросов.
    * Не рекомендуется использовать т.к. не имеет возвращаемого во вне результата
+   *
    * @see this.processMessageWithResponse(...)
    */
   @Override
@@ -76,37 +114,10 @@ public abstract class AbstractCommand extends DefaultBotCommand {
    * @return результат работы команды в виде описания того, что нужно сделать
    */
   public CommandResponse processMessageWithResponse(AbsSender absSender, Message message, String[] arguments) {
-    SendMessage sendMessage = SendMessage.builder()
+    return CommandResponse.builder()
         .replyToMessageId(lastMessageFromBot != null ? lastMessageFromBot.getMessageId() : null)
-        .chatId(lastMessageFromBot != null? lastMessageFromBot.getChatId(): message.getChatId())
-        .parseMode(MARKDOWN)
-        .text("Данная команда не поддерживает работу с текстом. Используйте кнопки")
+        .chatId(message.getChatId())
+        .messageText("Данная команда не поддерживает работу с текстом. Используйте кнопки")
         .build();
-    lastMessageFromBot = send(absSender, sendMessage);
-    return new CommandResponse();
-  }
-
-  /**
-   * TODO Вынести этот функционал в CommandResponseResolver
-   * Простая обёртка над процессом выполнения отправки ответов телеграм-ботом, чтобы
-   * не приходилось постоянно засовывать отправку в try-catch блоки с типичной логикой обработки.
-   *
-   * @param absSender бот, исполняющий запросы к телеграму
-   * @param method действие, которое необходимо совершить боту
-   * @return результат в виде описания сообщения, которое создал бот.
-   * @param <B> Объект показывающий результат отправки запроса к телеграму
-   *            TODO может вернуть и другие объекты, проверить исходники
-   * @param <T> сериализуемый объект
-   * @param <Method> запрос к телеграму
-   */
-  @Deprecated
-  protected <B extends BotApiObject, T extends Serializable, Method extends BotApiMethod<T>> B send(AbsSender absSender, Method method)  {
-    try {
-      // TODO Проверить каст
-      return (B) absSender.execute(method);
-    } catch (TelegramApiException e) {
-      log.error("В ходе отправки сообщения произошла ошибка: ", e);
-      throw new RuntimeException("В ходе отправки сообщения произошла ошибка", e);
-    }
   }
 }

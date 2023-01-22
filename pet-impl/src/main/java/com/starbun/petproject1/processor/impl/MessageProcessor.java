@@ -1,9 +1,11 @@
 package com.starbun.petproject1.processor.impl;
 
 import com.starbun.petproject1.command.AbstractCommand;
+import com.starbun.petproject1.dto.CommandResponse;
 import com.starbun.petproject1.dto.TelegramUserDto;
 import com.starbun.petproject1.model.UpdateType;
 import com.starbun.petproject1.processor.BotApiObjectProcessor;
+import com.starbun.petproject1.service.CommandResponseResolver;
 import com.starbun.petproject1.service.impl.TelegramUserService;
 import com.starbun.petproject1.util.CommandsLifeCycleManager;
 import lombok.Getter;
@@ -29,6 +31,7 @@ public class MessageProcessor implements BotApiObjectProcessor<Message> {
   private final UpdateType processingType = UpdateType.MESSAGE;
   private final CommandsLifeCycleManager commandsLifeCycleManager;
   private final TelegramUserService telegramUserService;
+  private final CommandResponseResolver commandResponseResolver;
 
   @Override
   public void process(AbsSender absSender, Message message) {
@@ -41,7 +44,8 @@ public class MessageProcessor implements BotApiObjectProcessor<Message> {
       // TODO 1 Если пришедший код команды не совпадает с тем, что в хранилище, то пересоздать команду.
       // TODO 2 как вариант сделать метод для закрытия команды и она проверяет, можно ли себя закрыть на данном этапе или нет
       // TODO 2.1 Проверять можно по текущему состоянию (MAX_INT)
-      commandByUserId.execute(absSender, message.getFrom(), message.getChat(), message.getMessageId(), null);
+      CommandResponse commandResponse = commandByUserId.executeWithResponse(absSender, message.getFrom(), message.getChat(), message.getMessageId(), null);
+      commandResponseResolver.sendToTelegram(commandResponse);
     } else {
       processNonCommandMessage(absSender, message);
     }
@@ -69,5 +73,4 @@ public class MessageProcessor implements BotApiObjectProcessor<Message> {
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("В данном сообщении нет команды в начале: messageId " + message.getMessageId()));
   }
-
 }

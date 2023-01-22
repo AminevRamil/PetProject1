@@ -44,6 +44,13 @@ public class StarBunBot extends TelegramLongPollingBot {
     updateResolver.process(this, update);
   }
 
+  @Override
+  public void onRegister() {
+    super.onRegister();
+    log.info("Бот успешно зарегистрирован в Telegram API");
+    // TODO Можно кинуть уведомление о старте бота
+  }
+
   /**
    * Заполнение меню команд для удобного просмотра пользователем.
    *
@@ -51,6 +58,7 @@ public class StarBunBot extends TelegramLongPollingBot {
    * или ограничить использование бота в некоторых типах чата.
    */
   private void initCommandMenu() {
+    // TODO Сделать иной способ заполнения меню с командами.
     List<BotCommand> botCommandList = commandList.stream()
         .map(basicCommand -> new BotCommand(basicCommand.getCommandIdentifier(), basicCommand.getDescription()))
         .toList();
@@ -61,11 +69,4 @@ public class StarBunBot extends TelegramLongPollingBot {
     }
   }
 
-
-  @Override
-  public void onRegister() {
-    super.onRegister();
-    log.info("Бот успешно зарегистрирован в Telegram API");
-    // TODO Можно кинуть уведомление о старте бота
-  }
 }
