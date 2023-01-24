@@ -60,7 +60,7 @@ public class DebtCommand extends AbstractCommand {
     var action = DebtActions.fromCode(info.getKeyboardActionCode());
 
     try {
-      ActionResponse actionResponse = stateMachine.performAction(action);
+      ActionResponse actionResponse = stateMachine.performAction(action, stateMachine);
 
     } catch (Exception e) {
       log.error("Ошибка обработки действия инлайн кнопки: ", e);

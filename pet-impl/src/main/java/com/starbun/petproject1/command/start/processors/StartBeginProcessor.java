@@ -1,11 +1,11 @@
 package com.starbun.petproject1.command.start.processors;
 
 import com.starbun.petproject1.command.AbstractStateProcessor;
-import com.starbun.petproject1.command.start.StartKeyboardService;
 import com.starbun.petproject1.command.start.StartState;
 import com.starbun.petproject1.command.start.StartActions;
+import com.starbun.petproject1.dto.CommandResponseType;
 import com.starbun.petproject1.dto.ProcessorRequest;
-import com.starbun.petproject1.dto.ProcessorResponse;
+import com.starbun.petproject1.dto.StateProcessorResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +20,18 @@ public class StartBeginProcessor extends AbstractStateProcessor<StartState, Star
   private final StartState processingState = StartState.START_BEGIN;
 
   @Override
-  public ProcessorResponse process(ProcessorRequest<StartActions> request) {
+  public StateProcessorResponse process(ProcessorRequest<StartActions> request) {
     log.debug("StartBeginProcessor action: " + request.getAction().getName());
     switch (request.getAction()) {
       case SHOW_COMMANDS -> {
-        return ProcessorResponse.builder()
-            .method(createMenuMessage(request))
+        return StateProcessorResponse.builder()
+            .responseType(CommandResponseType.NEW_MESSAGE)
+            .newState(StartState.START_BEGIN)
+            .messageText("""
+                Список команд:
+                  /start - старт
+                  /debt - долги
+                """)
             .build();
       }
       case RESTART -> {
@@ -36,11 +42,5 @@ public class StartBeginProcessor extends AbstractStateProcessor<StartState, Star
       }
     }
     return null;
-  }
-
-  private SendMessage createMenuMessage(ProcessorRequest<StartActions> request) {
-    return SendMessage.builder()
-        .text("Список команд:\n/start - старт\n/debt - долги\n")
-        .build();
   }
 }

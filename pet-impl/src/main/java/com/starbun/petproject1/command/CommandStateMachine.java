@@ -17,5 +17,5 @@ public interface CommandStateMachine<S extends CommandStates<A>, A extends Comma
    *
    * @param action заданное действие
    */
-  ActionResponse performAction(A action);
+  ActionResponse performAction(A action, AbstractStateMachine<S, A> state);
 }

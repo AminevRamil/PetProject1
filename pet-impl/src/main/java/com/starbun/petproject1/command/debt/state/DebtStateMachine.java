@@ -2,11 +2,9 @@ package com.starbun.petproject1.command.debt.state;
 
 import com.starbun.petproject1.command.AbstractStateMachine;
 import com.starbun.petproject1.command.AbstractStateProcessor;
+import com.starbun.petproject1.dto.ActionResponse;
 import com.starbun.petproject1.dto.DebtDraft;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;

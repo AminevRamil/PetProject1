@@ -32,7 +32,7 @@ public class UpdateResolverImpl implements UpdateResolver {
   @Override
   public void process(AbsSender absSender, Update update) {
     UpdateExtended updateExt = new UpdateExtended(update);
-    BotApiObjectProcessor<? extends BotApiObject> concreteProcessor = processorMap.get(updateExt.getUpdateType());
+    var concreteProcessor = processorMap.get(updateExt.getUpdateType());
 
     if (concreteProcessor == null) {
       throw new NoImplementationException("Нет реализации процессора сообщений типа " + updateExt.getUpdateType());

@@ -1,7 +1,7 @@
 package com.starbun.petproject1.command;
 
 import com.starbun.petproject1.dto.ProcessorRequest;
-import com.starbun.petproject1.dto.ProcessorResponse;
+import com.starbun.petproject1.dto.StateProcessorResponse;
 
 /**
  * Интерфейс обработчика состояний. Каждый обработчик должен быть
@@ -22,5 +22,5 @@ public interface CommandStateProcessor<S extends CommandStates<A>, A extends Com
    * @param request действие к исполнению
    * @return результат отработки действия для последующего применения
    */
-  ProcessorResponse process(ProcessorRequest<A> request);
+  StateProcessorResponse process(ProcessorRequest<A> request);
 }

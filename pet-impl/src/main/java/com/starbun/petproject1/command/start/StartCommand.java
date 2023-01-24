@@ -65,8 +65,12 @@ public class StartCommand extends AbstractCommand {
     var action = StartActions.fromCode(info.getKeyboardActionCode());
 
     try {
-      ActionResponse actionResponse = stateMachine.performAction(action);
-
+      ActionResponse actionResponse = stateMachine.performAction(action, stateMachine);
+      return CommandResponse.builder()
+          .commandResponseType(actionResponse.getResponseType())
+          .messageText(actionResponse.getMessageText())
+          .chatId(callbackQuery.getMessage().getChatId()) // (!)
+          .build();
     } catch (Exception e) {
       log.error("Ошибка обработки действия инлайн кнопки: ", e);
     }

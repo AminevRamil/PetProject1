@@ -2,7 +2,7 @@ package com.starbun.petproject1.command;
 
 import com.starbun.petproject1.dto.ActionResponse;
 import com.starbun.petproject1.dto.ProcessorRequest;
-import com.starbun.petproject1.dto.ProcessorResponse;
+import com.starbun.petproject1.dto.StateProcessorResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +42,7 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
   protected S currentState;
 
   @Override
-  public ActionResponse performAction(A action) {
+  public ActionResponse performAction(A action, AbstractStateMachine<S, A> state) {
     if (!stateProcessors.containsKey(currentState)) {
       throw new IllegalArgumentException("Обработчик не может обработать текущее состояние: " + currentState);
     }
@@ -52,8 +52,12 @@ public abstract class AbstractStateMachine<S extends CommandStates<A>, A extends
     }
     ProcessorRequest<A> processorRequest = new ProcessorRequest<>();
     processorRequest.setAction(action);
-    ProcessorResponse response = stateProcessors.get(currentState).process(processorRequest);
+    StateProcessorResponse response = stateProcessors.get(currentState).process(processorRequest);
     currentState = (S) response.getNewState();
-    return new ActionResponse();
+    // TODO Заменить на маппер?
+    return ActionResponse.builder()
+        .messageText(response.getMessageText())
+        .responseType(response.getResponseType())
+        .build();
   }
 }

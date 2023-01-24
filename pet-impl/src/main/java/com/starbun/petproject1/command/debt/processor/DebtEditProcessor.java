@@ -5,7 +5,7 @@ import com.starbun.petproject1.command.AbstractStateProcessor;
 import com.starbun.petproject1.command.debt.state.DebtState;
 import com.starbun.petproject1.command.debt.state.DebtActions;
 import com.starbun.petproject1.dto.ProcessorRequest;
-import com.starbun.petproject1.dto.ProcessorResponse;
+import com.starbun.petproject1.dto.StateProcessorResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class DebtEditProcessor extends AbstractStateProcessor<DebtState, DebtAct
   private final DebtState processingState = DebtState.DEBT_EDIT;
 
   @Override
-  public ProcessorResponse process(ProcessorRequest<DebtActions> request) {
+  public StateProcessorResponse process(ProcessorRequest<DebtActions> request) {
     log.info("DebtEditProcessor action: " + request.getAction().getName());
     return null;
   }
